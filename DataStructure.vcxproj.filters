@@ -4,10 +4,16 @@
     <Filter Include="SeqList">
       <UniqueIdentifier>{8cb46432-36aa-48fd-90db-c467d5020349}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LinkedList">
+      <UniqueIdentifier>{3bcaa042-1315-47c2-a94d-8c249092fd1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SeqList\SeqList.h">
       <Filter>SeqList</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkedList\LinkedList.h">
+      <Filter>LinkedList</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

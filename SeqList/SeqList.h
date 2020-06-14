@@ -1,4 +1,4 @@
-
+#pragma once
 #include<iostream>
 
 #define ElemType int

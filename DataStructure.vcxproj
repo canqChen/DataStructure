@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="LinkedList\LinkedList.h" />
     <ClInclude Include="SeqList\SeqList.h" />
   </ItemGroup>
   <ItemGroup>
