@@ -33,6 +33,22 @@ public:
 		head->next = nullptr;
 	}
 
+	int calLength()
+	{
+		int count = 0;
+		pLnode temp = head->next;
+		while (temp != nullptr)
+		{
+			count++;
+		}
+		return count;
+	}
+
+	int getLength()
+	{
+		return length;
+	}
+
 	bool is_empty()
 	{
 		return (head->next == nullptr ? true : false);
@@ -47,6 +63,7 @@ public:
 			head = head->next;
 			delete temp;
 		}
+		length = 0;
 	}
 
 	void clear()
@@ -60,9 +77,11 @@ public:
 			delete temp;
 		}
 		head->next = nullptr;
+		length = 0;
 	}
 
 private:
 	pLnode list;
 	pLnode head;
+	int length;
 };
