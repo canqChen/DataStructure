@@ -38,6 +38,30 @@ public:
 		return (head->next == nullptr ? true : false);
 	}
 
+	void destroy()
+	{	
+		pLnode temp;
+		while (head != nullptr)
+		{
+			temp = head;
+			head = head->next;
+			delete temp;
+		}
+	}
+
+	void clear()
+	{
+		pLnode first_node = head->next;
+		pLnode temp;
+		while (first_node!=nullptr)
+		{
+			temp = first_node;
+			first_node = first_node->next;
+			delete temp;
+		}
+		head->next = nullptr;
+	}
+
 private:
 	pLnode list;
 	pLnode head;
