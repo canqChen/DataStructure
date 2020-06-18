@@ -40,6 +40,7 @@ public:
 		while (temp != nullptr)
 		{
 			count++;
+			temp = temp->next;
 		}
 		return count;
 	}
