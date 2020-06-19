@@ -9,7 +9,7 @@ using namespace std;
 typedef struct Lnode {
 	ELETYPE data;
 	struct Lnode * next;
-}Lnode, *pLnode;
+}Lnode, *pLnode, *LList;
 
 
 class LinkedList
@@ -19,6 +19,7 @@ public:
 	{
 		initialization();
 	}
+
 	~LinkedList()
 	{
 		if (list != nullptr)
@@ -26,7 +27,8 @@ public:
 			delete list;
 		}
 	}
-	void initialization() 
+
+	void initialization()
 	{
 		head = new Lnode;
 		list = head;
@@ -60,20 +62,21 @@ public:
 		{
 			throw "the linked list is empty";
 		}
-		pLnode cur_node = head->next;
-		ELETYPE data;
-		do 
+		pLnode cur_node = head;
+
+		do
 		{
-			data = cur_node->data;
 			cur_node = cur_node->next;
 			pos--;
 		} while (pos>0);
-		return data;
+
+		return cur_node->data;
 	}
 
 	bool is_empty()
 	{
-		return (head->next == nullptr ? true : false);
+		//return (head->next == nullptr ? true : false);
+		return (length < 1 ? true : false);
 	}
 
 	void destroy()
@@ -103,7 +106,7 @@ public:
 	}
 
 private:
-	pLnode list;
+	LList list;
 	pLnode head;
 	int length;
 };
