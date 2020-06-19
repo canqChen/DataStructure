@@ -4,7 +4,7 @@
 
 typedef int ELETYPE;
 
-
+using namespace std;
 
 typedef struct Lnode {
 	ELETYPE data;
@@ -48,6 +48,27 @@ public:
 	int getLength()
 	{
 		return length;
+	}
+
+	ELETYPE getElementAt(int pos)
+	{
+		if (pos<1||pos>length)
+		{
+			throw "wrong position";
+		}
+		if (is_empty())
+		{
+			throw "the linked list is empty";
+		}
+		pLnode cur_node = head->next;
+		ELETYPE data;
+		do 
+		{
+			data = cur_node->data;
+			cur_node = cur_node->next;
+			pos--;
+		} while (pos>0);
+		return data;
 	}
 
 	bool is_empty()
