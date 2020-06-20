@@ -121,6 +121,7 @@ public:
 			newNode->data = ele;
 			newNode->next = nullptr;
 			cur_node->next = newNode;
+			length++;
 			return;
 		}
 
@@ -128,6 +129,7 @@ public:
 		{
 			throw "wrong position";
 		}
+
 		// insert to the middle
 		pLnode cur_node = head;
 		for (int i = 1; i<=pos-1;i++)
@@ -138,14 +140,17 @@ public:
 		newNode->data = ele;
 		newNode->next = cur_node->next;
 		cur_node->next = newNode;
+		length++;
 	}
 
 	void print()
 	{
 		check_list();
 		pLnode cur_node = head->next;
-		while ()
+		while (cur_node!=nullptr)
 		{
+			cout << cur_node->data;
+			cur_node = cur_node->next;
 		}
 	}
 
