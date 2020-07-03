@@ -19,6 +19,12 @@ public:
 		initialization();
 	}
 
+	LinkedList(const LinkedList& list)  //use an exsist linked list to initialize 
+	{
+		this->head = new Lnode;
+
+	}
+
 	~LinkedList()
 	{
 		if (list != nullptr)
@@ -179,6 +185,11 @@ public:
 		}
 		head->next = nullptr;
 		length = 0;
+	}
+
+	pLnode getHead()
+	{
+		return head;
 	}
 
 private:
