@@ -127,6 +127,7 @@ public:
 			newNode->data = ele;
 			newNode->next = nullptr;
 			cur_node->next = newNode;
+			length++;
 			return;
 		}
 
@@ -134,6 +135,7 @@ public:
 		{
 			throw "wrong position";
 		}
+
 		// insert to the middle
 		pLnode cur_node = head;
 		for (int i = 1; i<=pos-1;i++)
@@ -144,14 +146,58 @@ public:
 		newNode->data = ele;
 		newNode->next = cur_node->next;
 		cur_node->next = newNode;
+		length++;
+	}
+
+	void removeNodeByPosition(int pos)
+	{
+		check_list();
+		if (pos<1 || pos>length)
+		{
+			throw "wrong position";
+		}
+
+		pLnode cur_node = head;
+
+		for (int i = 1; i <= pos - 1; i++)
+		{
+			cur_node = cur_node->next;
+		}
+		pLnode temp = cur_node->next;
+		cur_node->next = (cur_node->next)->next;
+		delete temp;
+	}
+
+	void removeNodeByValue(ELETYPE ele, bool rmAll = false)
+	{
+		check_list();
+
+		pLnode cur_node = head;
+
+		while (cur_node->next != nullptr)
+		{
+			if (cur_node->next->data = ele)
+			{
+				pLnode temp = cur_node->next;
+				cur_node->next = cur_node->next->next;
+				delete temp;
+				if (rmAll)
+					continue;
+				else
+					return;
+			}
+			cur_node = cur_node->next;
+		}
 	}
 
 	void print()
 	{
 		check_list();
 		pLnode cur_node = head->next;
-		while ()
+		while (cur_node!=nullptr)
 		{
+			cout << cur_node->data<<"  ";
+			cur_node = cur_node->next;
 		}
 	}
 
