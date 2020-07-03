@@ -16,29 +16,45 @@ class LinkedList
 public:
 	LinkedList()
 	{
-		initialization();
+		head = new Lnode;
+		head->next = nullptr;
+		this->length = 0;
 	}
 
-	LinkedList(const LinkedList& list)  //use an exsist linked list to initialize 
+	LinkedList(const LinkedList & list)  //use an exsist linked list to initialize 
 	{
+		destroy();
 		this->head = new Lnode;
+		this->head->next = nullptr;
+		this->length = list.length;
+
+		const pLnode l_head = list.head;
+		pLnode cur_node = head;
+		
+		pLnode l_cur_node = l_head->next;
+		while (l_cur_node !=nullptr)
+		{
+			pLnode new_node = new Lnode;
+			new_node->data = l_cur_node->data;
+			new_node->next = nullptr;
+
+			cur_node->next = new_node;
+
+			cur_node = cur_node->next;
+			l_cur_node = l_cur_node->next;
+		}
+
 
 	}
 
 	~LinkedList()
 	{
-		if (list != nullptr)
+		if (head != nullptr)
 		{
-			delete list;
+			delete head;
 		}
 	}
 
-	void initialization()
-	{
-		head = new Lnode;
-		list = head;
-		head->next = nullptr;
-	}
 
 	int calLength()
 	{
@@ -233,13 +249,8 @@ public:
 		length = 0;
 	}
 
-	pLnode getHead()
-	{
-		return head;
-	}
 
 private:
-	LList list;
 	pLnode head;
 	int length;
 
