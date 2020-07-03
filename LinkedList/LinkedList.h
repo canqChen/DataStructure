@@ -190,7 +190,7 @@ public:
 		pLnode cur_node = head->next;
 		while (cur_node!=nullptr)
 		{
-			cout << cur_node->data;
+			cout << cur_node->data<<"  ";
 			cur_node = cur_node->next;
 		}
 	}
