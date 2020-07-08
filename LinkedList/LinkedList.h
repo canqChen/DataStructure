@@ -77,7 +77,7 @@ public:
 	{
 		if (pos<1 || pos>length)
 		{
-			throw "wrong position";
+			throw string("wrong position");
 		}
 		check_list();
 		pLnode cur_node = head;
@@ -105,7 +105,7 @@ public:
 			}
 		}
 
-		throw "element not found!";
+		throw string("element not found!");
 	}
 
 	pLnode getAddress(ELETYPE ele)
@@ -123,7 +123,7 @@ public:
 			cur_node = cur_node->next;
 		}
 
-		throw "element not found!";
+		throw string("element not found!");
 	}
 
 	void insert(ELETYPE ele, int pos = -1)
@@ -149,7 +149,7 @@ public:
 
 		if (pos<1 || pos>length+1)
 		{
-			throw "wrong position";
+			throw string("wrong position");
 		}
 
 		// insert to the middle
@@ -170,7 +170,7 @@ public:
 		check_list();
 		if (pos<1 || pos>length)
 		{
-			throw "wrong position";
+			throw string("wrong position");
 		}
 
 		pLnode cur_node = head;
@@ -190,12 +190,12 @@ public:
 
 		pLnode cur_node = head;
 
-		while (cur_node->next != nullptr)
+		while ((cur_node->next) != nullptr)
 		{
-			if (cur_node->next->data = ele)
+			if ((cur_node->next)->data = ele)
 			{
 				pLnode temp = cur_node->next;
-				cur_node->next = cur_node->next->next;
+				cur_node->next = temp->next;
 				delete temp;
 				if (rmAll)
 					continue;
@@ -258,7 +258,7 @@ private:
 	{
 		if (is_empty())
 		{
-			throw "the linked list is empty!";
+			throw string("the linked list is empty!");
 		}
 	}
 };
