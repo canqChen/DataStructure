@@ -192,7 +192,7 @@ public:
 
 		while ((cur_node->next) != nullptr)
 		{
-			if ((cur_node->next)->data = ele)
+			if ((cur_node->next)->data == ele)
 			{
 				pLnode temp = cur_node->next;
 				cur_node->next = temp->next;

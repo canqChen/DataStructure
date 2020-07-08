@@ -52,7 +52,7 @@ int SeqList_main()
 	return 0;
 }
 
-int LinkedList_main()
+int main()
 {
 	LinkedList L = LinkedList();
 	int choice;
