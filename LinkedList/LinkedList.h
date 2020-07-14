@@ -55,17 +55,31 @@ public:
 		}
 	}
 
-
-	int calLength()
+	void extend(const LinkedList& list)    //merge another liked list
 	{
-		int count = 0;
-		pLnode temp = head->next;
-		while (temp != nullptr)
+		
+		this->length += list.length;
+
+		const pLnode l_head = list.head;
+		pLnode cur_node = head;
+
+		while (cur_node->next!=nullptr)
 		{
-			count++;
-			temp = temp->next;
+			cur_node = cur_node->next;
 		}
-		return count;
+
+		pLnode l_cur_node = l_head->next;
+		while (l_cur_node != nullptr)
+		{
+			pLnode new_node = new Lnode;
+			new_node->data = l_cur_node->data;
+			new_node->next = nullptr;
+
+			cur_node->next = new_node;
+
+			cur_node = cur_node->next;
+			l_cur_node = l_cur_node->next;
+		}
 	}
 
 	int getLength()
