@@ -7,6 +7,9 @@
     <Filter Include="LinkedList">
       <UniqueIdentifier>{3bcaa042-1315-47c2-a94d-8c249092fd1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Stack">
+      <UniqueIdentifier>{050664ba-4bcb-4769-839c-a4dd0c0d9c17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SeqList\SeqList.h">
@@ -14,6 +17,9 @@
     </ClInclude>
     <ClInclude Include="LinkedList\LinkedList.h">
       <Filter>LinkedList</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack\Stack.h">
+      <Filter>Stack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

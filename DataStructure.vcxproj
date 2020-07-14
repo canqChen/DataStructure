@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="LinkedList\LinkedList.h" />
     <ClInclude Include="SeqList\SeqList.h" />
+    <ClInclude Include="Stack\Stack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
