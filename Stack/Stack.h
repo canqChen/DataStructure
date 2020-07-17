@@ -6,6 +6,11 @@
 
 using namespace std;
 
+typedef struct stackNode {
+	ElemType data;
+	struct stackNode* next;
+}StkNode, * pStkNode;
+
 class SeqStack
 {
 public:
@@ -87,4 +92,74 @@ private:
 	{
 		return size == 0 ? true : false;
 	}
+};
+
+
+class LinkedStack
+{
+public:
+	LinkedStack()
+	{
+		top = nullptr;
+		length = 0;
+	}
+
+	~LinkedStack()
+	{
+		clear();
+	}
+
+	int getLength()
+	{
+		return length;
+	}
+
+	void push(ElemType ele)
+	{
+		pStkNode newNode = new StkNode;
+		newNode->data = ele;
+		newNode->next = top;
+		top = newNode;
+		length++;
+	}
+
+	ElemType pop()
+	{
+		if (top == nullptr)
+		{
+			throw string("the stack is empty");
+		}
+		ElemType ret = top->data;
+		pStkNode tmp = top;
+		top = top->next;
+		delete tmp;
+		length--;
+		return ret;
+	}
+
+	ElemType getTop()
+	{
+		if (top==nullptr)
+		{
+			throw string("the stack is empty");
+		}
+		return top->data;
+	}
+
+	void clear()
+	{
+		if (top != nullptr)
+		{
+			while (top != nullptr)
+			{
+				pStkNode tmp = top;
+				top = top->next;
+				delete tmp;
+			}
+		}
+	}
+private:
+	pStkNode top;
+	int length;
+
 };
