@@ -57,17 +57,6 @@ public:
 		return stack[top-1];
 	}
 
-	void destroy()
-	{
-		if (stack != nullptr)
-		{
-			delete[] stack;
-			stack = nullptr;
-			size = 0;
-			top = 0;
-		}
-	}
-
 	void clear()
 	{
 		if (stack != nullptr)
@@ -77,9 +66,9 @@ public:
 		}
 	}
 
-	~SeqStack() {
-		if (stack != nullptr)
-			delete[] stack;
+	~SeqStack() 
+	{
+		delete[] stack;
 	}
 
 private:
@@ -91,6 +80,17 @@ private:
 	bool is_empty()
 	{
 		return size == 0 ? true : false;
+	}
+
+	void destroy()
+	{
+		if (stack != nullptr)
+		{
+			delete[] stack;
+			stack = nullptr;
+			size = 0;
+			top = 0;
+		}
 	}
 };
 
