@@ -10,6 +10,9 @@
     <Filter Include="Stack">
       <UniqueIdentifier>{050664ba-4bcb-4769-839c-a4dd0c0d9c17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Queue">
+      <UniqueIdentifier>{e99271b7-8c3b-420e-94d0-5133521de2ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SeqList\SeqList.h">
@@ -20,6 +23,9 @@
     </ClInclude>
     <ClInclude Include="Stack\Stack.h">
       <Filter>Stack</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue\Queue.h">
+      <Filter>Queue</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
