@@ -13,6 +13,9 @@
     <Filter Include="Queue">
       <UniqueIdentifier>{e99271b7-8c3b-420e-94d0-5133521de2ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyString">
+      <UniqueIdentifier>{68a047d2-d23d-45f6-9b2a-89f123a5a861}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SeqList\SeqList.h">
@@ -26,6 +29,9 @@
     </ClInclude>
     <ClInclude Include="Queue\Queue.h">
       <Filter>Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="String\MyString.h">
+      <Filter>MyString</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

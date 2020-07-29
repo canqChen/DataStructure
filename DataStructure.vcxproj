@@ -143,6 +143,7 @@
     <ClInclude Include="Queue\Queue.h" />
     <ClInclude Include="SeqList\SeqList.h" />
     <ClInclude Include="Stack\Stack.h" />
+    <ClInclude Include="String\MyString.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
