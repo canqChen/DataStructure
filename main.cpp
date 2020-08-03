@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include"./SeqList/SeqList.h"
-#include"./LinkedList/LinkedList.h"
+#include "./SeqList/SeqList.h"
+#include "./LinkedList/LinkedList.h"
+#include "./MyString/MyString.h"
 
 using namespace std;
 
@@ -116,4 +117,14 @@ int LinkedList_main()
 		
 	} while (choice != 0);
 	return 0;
+}
+
+int main()
+{
+	MyString str = "hello world!";
+
+	int pos = str.findKMP("ello");
+
+	cout << pos;
+
 }
