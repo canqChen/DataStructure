@@ -80,16 +80,16 @@ public:
 		int curLen = strlen(str);
 		if (newLen + curLen >= capacity)
 		{
-			capacity = newLen + curLen + 1; 
-			char *tmp = new char[capacity];
+			capacity = newLen + curLen + 1;
+			char* tmp = new char[capacity];
 			int i = 0, j = 0;
 			const char* s_str = s.c_str();
-			while (str[i]!='\0')
+			while (str[i] != '\0')
 			{
 				tmp[i] = str[i];
 				i++;
 			}
-			while (s_str[j]!=0)
+			while (s_str[j] != 0)
 			{
 				tmp[i] = s_str[j];
 				i++;
@@ -103,6 +103,100 @@ public:
 		{
 			strcat(str, s.c_str());
 		}
+	}
+
+	int findBF(const char* s, int pos = 1)
+	{
+		int i = pos-1, j = 0;
+		int sLen = strlen(s);
+		int len = length();
+		if (pos>=len)
+		{
+			throw string("overflow!");
+		}
+		while (i < len && j < sLen)
+		{
+			if (str[i] == s[j])
+			{
+				i++;
+				j++;
+			}
+			else
+			{
+				i = i - j + 1;
+				j = 0;
+			}
+		}
+		if (j >= sLen)
+			return i - sLen + 1;
+		else
+			return 0;
+	}
+
+	int findBF(const MyString& s, int pos=1)
+	{
+		return findBF(s.c_str(), pos);
+	}
+
+	int* getNext(const char* pat)
+	{
+		// get next[]
+		int len = strlen(pat);
+		int* next = new int[len];
+		int i = 2, k = 0;
+		next[0] = next[1] = 0;
+		while (i < len)
+		{
+			if (k==0||pat[i]==pat[k])
+			{
+				i++;
+				k++;
+				next[i] = k;
+			}
+			else
+			{
+				k = next[k];
+			}
+		}
+
+		return next;
+	}
+
+	int findKMP(const char* s, int pos = 1)
+	{
+		int i = pos - 1, j = 0;
+		int sLen = strlen(s);
+		int len = length();
+		if (pos >= len)
+		{
+			throw string("overflow!");
+		}
+
+		int* next = getNext(s);
+
+		while (i < len && j < sLen)
+		{
+			if (str[i] == s[j])
+			{
+				i++;
+				j++;
+			}
+			else
+			{
+				j = next[j];
+			}
+		}
+
+		delete[] next;
+		if (j >= sLen)
+			return i - sLen + 1;
+		else
+			return 0;
+	}
+
+	int findKMP(const MyString& s, int pos = 1)
+	{
+		return findKMP(s.c_str(), pos);
 	}
 
 	int length()
