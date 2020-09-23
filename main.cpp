@@ -121,10 +121,11 @@ int LinkedList_main()
 
 int main()
 {
-	MyString str = "hello world!";
+	//MyString str = "hello world!";
 
-	int pos = str.findKMP("ello");
+	//int pos = str.findKMP("ello");
 
-	cout << pos;
+	//cout << pos;
+
 
 }
