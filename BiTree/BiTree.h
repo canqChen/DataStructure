@@ -15,6 +15,7 @@ class BiTree
 public:
 	BiTree(const char* nodeStr, int order = 0);
 	BiTree(std::string nodeStr, int order = 0);
+	BiTree(const BiTree & tree);
 
 	~BiTree();
 
@@ -28,6 +29,7 @@ private:
 	void postOrderTraverse(pBiTreeNode node);
 	void levelOrderTraverse(pBiTreeNode node);
 	void visit(pBiTreeNode node);
+	pBiTreeNode copy(pBiTreeNode node);
 };
 
 BiTree::BiTree(const char * nodeStr, int order = 0)
@@ -40,9 +42,14 @@ BiTree::BiTree(std::string nodeStr, int order = 0)
 	buildPreOrderBiTree(nodeStr.c_str());
 }
 
+BiTree::BiTree(const BiTree& tree)
+{
+	root = copy(tree.root);
+}
+
 // print the data of all nodes in the tree, order is to select the traverse approaches, 
 //0 for pre-order, 1 for mid-order and 2 for post-order
-inline void BiTree::printTree(int order=0)
+void BiTree::printTree(int order=0)
 {
 	if (root == nullptr)
 		std::cout << "tree is empty!";
@@ -63,7 +70,7 @@ inline void BiTree::printTree(int order=0)
 	}
 }
 
-inline pBiTreeNode BiTree::buildPreOrderBiTree(const char* nodeStr)
+pBiTreeNode BiTree::buildPreOrderBiTree(const char* nodeStr)
 {
 	static int idx = 0;
 	if (nodeStr[idx] == '\0')
@@ -84,7 +91,7 @@ inline pBiTreeNode BiTree::buildPreOrderBiTree(const char* nodeStr)
 	return newNode;
 }
 
-inline void BiTree::preOrderTraverse(pBiTreeNode node)
+void BiTree::preOrderTraverse(pBiTreeNode node)
 {
 	if (node == nullptr)
 		return;
@@ -97,7 +104,7 @@ inline void BiTree::preOrderTraverse(pBiTreeNode node)
 	
 }
 
-inline void BiTree::midOrderTraverse(pBiTreeNode node)
+void BiTree::midOrderTraverse(pBiTreeNode node)
 {
 	/* recursive implementation
 	if (node == nullptr)
@@ -129,7 +136,7 @@ inline void BiTree::midOrderTraverse(pBiTreeNode node)
 }
 
 
-inline void BiTree::postOrderTraverse(pBiTreeNode node)
+void BiTree::postOrderTraverse(pBiTreeNode node)
 {
 	if (node == nullptr)
 		return;
@@ -141,7 +148,7 @@ inline void BiTree::postOrderTraverse(pBiTreeNode node)
 	}
 }
 
-inline void BiTree::levelOrderTraverse(pBiTreeNode node)
+void BiTree::levelOrderTraverse(pBiTreeNode node)
 {
 	if (node == nullptr)
 		return;
@@ -159,10 +166,24 @@ inline void BiTree::levelOrderTraverse(pBiTreeNode node)
 }
 
 // do something to the node, print its data here.
-inline void BiTree::visit(pBiTreeNode node)
+void BiTree::visit(pBiTreeNode node)
 {
 	if(node!=nullptr)
 		std::cout << node->data;
+}
+
+pBiTreeNode BiTree::copy(pBiTreeNode node)
+{
+	if (node == nullptr)
+		return nullptr;
+	else
+	{
+		pBiTreeNode newNode = new BiTreeNode;
+		newNode->data = node->data;
+		newNode->lChild = copy(node->lChild);
+		newNode->rChild = copy(node->rChild);
+		return newNode;
+	}
 }
 
 BiTree::~BiTree()
