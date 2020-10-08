@@ -37,7 +37,7 @@ void selectionSort(int array[], int length)
 	}
 }
 
-void insertSort(int array[], int length)
+void insertionSort(int array[], int length)
 {
 	for (int i = 1; i < length; i++)
 	{
@@ -49,5 +49,30 @@ void insertSort(int array[], int length)
 			j--;
 		}
 		array[j+1] = tmp;
+	}
+}
+
+
+// serves for shell sort
+void insertionSort(int array[], int gap, int idx)
+{
+	int tmp = array[idx];
+	int j = idx-gap;
+	while (j >= 0 && array[j-gap] > tmp)
+	{
+		array[j + gap] = array[j];
+		j -= gap;
+	}
+	array[j + gap] = tmp;
+}
+
+void shellSort(int array[], int length)
+{
+	for (gap = length / 2; gap > 0; gap /= 2)
+	{
+		for (int i = gap; i<length; i++)
+		{
+			insertionSort(array, gap, i);
+		}
 	}
 }

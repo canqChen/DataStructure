@@ -2,8 +2,9 @@
 #include<iostream>
 #include <stack>
 #include <Queue>
+#include<string>
 
-#define ElemType int
+#define ElemType char
 typedef struct BiTreeNode {
 	ElemType data;
 	struct BiTreeNode *lChild, *rChild;
@@ -12,7 +13,8 @@ typedef struct BiTreeNode {
 class BiTree
 {
 public:
-	BiTree();
+	BiTree(const char* nodeStr, int order = 0);
+	BiTree(std::string nodeStr, int order = 0);
 
 	~BiTree();
 
@@ -20,7 +22,7 @@ public:
 	
 private:
 	pBiTreeNode root;
-
+	pBiTreeNode buildPreOrderBiTree(const char * nodeStr);
 	void preOrderTraverse(pBiTreeNode node);
 	void midOrderTraverse(pBiTreeNode node);
 	void postOrderTraverse(pBiTreeNode node);
@@ -28,9 +30,14 @@ private:
 	void visit(pBiTreeNode node);
 };
 
-BiTree::BiTree()
+BiTree::BiTree(const char * nodeStr, int order = 0)
 {
+	buildPreOrderBiTree(nodeStr);
+}
 
+BiTree::BiTree(std::string nodeStr, int order = 0)
+{
+	buildPreOrderBiTree(nodeStr.c_str());
 }
 
 // print the data of all nodes in the tree, order is to select the traverse approaches, 
@@ -54,6 +61,27 @@ inline void BiTree::printTree(int order=0)
 		std::cout << "bad order!";
 		break;
 	}
+}
+
+inline pBiTreeNode BiTree::buildPreOrderBiTree(const char* nodeStr)
+{
+	static int idx = 0;
+	if (nodeStr[idx] == '\0')
+	{
+		idx = 0;
+		return;
+	}
+	pBiTreeNode newNode = nullptr;
+	if (nodeStr[idx] != '#')
+	{
+		newNode = new BiTreeNode;
+		newNode->data = nodeStr[idx];
+		if (root == nullptr) root = newNode;
+		idx++;
+		newNode->lChild = buildPreOrderBiTree(nodeStr);
+		newNode->rChild = buildPreOrderBiTree(nodeStr);
+	}
+	return newNode;
 }
 
 inline void BiTree::preOrderTraverse(pBiTreeNode node)
