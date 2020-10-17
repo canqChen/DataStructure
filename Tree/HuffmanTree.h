@@ -5,21 +5,24 @@
 #include<string>
 
 #define ElemType char
-typedef struct BiTreeNode {
+typedef struct HuffmanTreeNode {
 	ElemType data;
-	struct BiTreeNode *lChild, *rChild;
-}BiTreeNode, * pBiTreeNode;
+	struct BiTreeNode *parent, *lChild, *rChild;
+}HfmTreeNode, * pHfmTreeNode;
 
-class BiTree
+class HuffmanTree
 {
 public:
-	BiTree(const char* nodeStr, int order = 0);
-	BiTree(std::string nodeStr, int order = 0);
-	BiTree(const BiTree & tree);
+	HuffmanTree(const char* nodeStr, int order = 0);
+	HuffmanTree(std::string nodeStr, int order = 0);
+	HuffmanTree(const BiTree & tree);
 
-	~BiTree();
+	~HuffmanTree();
 
 	void printTree(int order=0);
+	int depth();
+	int numOfNode();
+	int numOfLeaf();
 	
 private:
 	pBiTreeNode root;
@@ -30,26 +33,29 @@ private:
 	void levelOrderTraverse(pBiTreeNode node);
 	void visit(pBiTreeNode node);
 	pBiTreeNode copy(pBiTreeNode node);
+	int calDepth(pBiTreeNode node);
+	int calNodeNum(pBiTreeNode node);
+	int calLeafNum(pBiTreeNode node);
 };
 
-BiTree::BiTree(const char * nodeStr, int order = 0)
+HuffmanTree::HuffmanTree(const char * nodeStr, int order = 0)
 {
 	buildPreOrderBiTree(nodeStr);
 }
 
-BiTree::BiTree(std::string nodeStr, int order = 0)
+HuffmanTree::HuffmanTree(std::string nodeStr, int order = 0)
 {
 	buildPreOrderBiTree(nodeStr.c_str());
 }
 
-BiTree::BiTree(const BiTree& tree)
+HuffmanTree::HuffmanTree(const BiTree& tree)
 {
 	root = copy(tree.root);
 }
 
 // print the data of all nodes in the tree, order is to select the traverse approaches, 
 //0 for pre-order, 1 for mid-order and 2 for post-order
-void BiTree::printTree(int order=0)
+void HuffmanTree::printTree(int order=0)
 {
 	if (root == nullptr)
 		std::cout << "tree is empty!";
@@ -70,7 +76,7 @@ void BiTree::printTree(int order=0)
 	}
 }
 
-pBiTreeNode BiTree::buildPreOrderBiTree(const char* nodeStr)
+pBiTreeNode HuffmanTree::buildPreOrderBiTree(const char* nodeStr)
 {
 	static int idx = 0;
 	if (nodeStr[idx] == '\0')
@@ -184,6 +190,51 @@ pBiTreeNode BiTree::copy(pBiTreeNode node)
 		newNode->rChild = copy(node->rChild);
 		return newNode;
 	}
+}
+
+int BiTree::depth()
+{
+	return calDepth(root);
+}
+
+int BiTree::calDepth(pBiTreeNode node)
+{
+	if (node == nullptr)
+		return 0;
+	else
+	{
+		int lDepth = calDepth(node->lChild);
+		int rDepth = calDepth(node->rChild);
+		return lDepth > rDepth ? lDepth + 1 : rDepth + 1;
+	}
+}
+
+int BiTree::numOfNode()
+{
+	return calNodeNum(root);
+}
+
+int BiTree::calNodeNum(pBiTreeNode node)
+{
+	if (node == nullptr)
+		return 0;
+	else
+		return calNodeNum(node->lChild) + calNodeNum(node->rChild) + 1;
+}
+
+int BiTree::numOfLeaf()
+{
+	return calNodeNum(root);
+}
+
+int BiTree::calLeafNum(pBiTreeNode node)
+{
+	if (node == nullptr)
+		return 0;
+	if (node->lChild == nullptr && node->rChild == nullptr)
+		return 1;
+	else
+		return calLeafNum(node->lChild) + calLeafNum(node->rChild);
 }
 
 BiTree::~BiTree()

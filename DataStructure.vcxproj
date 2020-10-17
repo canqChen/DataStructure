@@ -139,12 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BiTree\BiTree.h" />
     <ClInclude Include="LinkedList\LinkedList.h" />
     <ClInclude Include="MyString\MyString.h" />
     <ClInclude Include="Queue\Queue.h" />
     <ClInclude Include="SeqList\SeqList.h" />
     <ClInclude Include="Stack\Stack.h" />
+    <ClInclude Include="Tree\BiTree.h" />
+    <ClInclude Include="Tree\HuffmanTree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

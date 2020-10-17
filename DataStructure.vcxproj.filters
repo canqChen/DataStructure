@@ -16,14 +16,14 @@
     <Filter Include="MyString">
       <UniqueIdentifier>{68a047d2-d23d-45f6-9b2a-89f123a5a861}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BiTree">
-      <UniqueIdentifier>{bada5797-1f76-4d1d-8cf6-272039e87449}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sorting Algorithm">
       <UniqueIdentifier>{0a41b679-0621-4d1c-9793-2c527bbaf9b5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Search Algorithm">
       <UniqueIdentifier>{4767a30c-41cd-4709-abe7-1bff1d97f441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tree">
+      <UniqueIdentifier>{bada5797-1f76-4d1d-8cf6-272039e87449}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,11 +39,14 @@
     <ClInclude Include="Queue\Queue.h">
       <Filter>Queue</Filter>
     </ClInclude>
-    <ClInclude Include="BiTree\BiTree.h">
-      <Filter>BiTree</Filter>
-    </ClInclude>
     <ClInclude Include="MyString\MyString.h">
       <Filter>MyString</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\BiTree.h">
+      <Filter>Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\HuffmanTree.h">
+      <Filter>Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
