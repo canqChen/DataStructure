@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Graph\Graph.h" />
     <ClInclude Include="LinkedList\LinkedList.h" />
     <ClInclude Include="MyString\MyString.h" />
     <ClInclude Include="Queue\Queue.h" />

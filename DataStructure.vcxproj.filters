@@ -25,6 +25,9 @@
     <Filter Include="Tree">
       <UniqueIdentifier>{bada5797-1f76-4d1d-8cf6-272039e87449}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graph">
+      <UniqueIdentifier>{5b3acec2-912b-44b8-9328-7e82358cc1f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SeqList\SeqList.h">
@@ -47,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="Tree\HuffmanTree.h">
       <Filter>Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph\Graph.h">
+      <Filter>Graph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

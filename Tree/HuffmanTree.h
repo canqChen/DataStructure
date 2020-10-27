@@ -4,240 +4,135 @@
 #include <Queue>
 #include<string>
 
-#define ElemType char
+using namespace std;
+
+// linked list implementation
+//typedef struct HuffmanTreeNode {
+//	ElemType weight;
+//	struct HuffmanTreeNode *parent, *lChild, *rChild;
+//	HuffmanTreeNode(ElemType weight=0): weight(weight), parent(nullptr), lChild(nullptr), rChild(nullptr)
+//	{}
+//}HfmTreeNode, * pHfmTreeNode;
+
+// linear list implementation
 typedef struct HuffmanTreeNode {
-	ElemType data;
-	struct BiTreeNode *parent, *lChild, *rChild;
+	int weight;
+	int parent, lChild, rChild;
+	HuffmanTreeNode(int weight = 0) : weight(weight), parent(0), lChild(0), rChild(0)
+	{}
 }HfmTreeNode, * pHfmTreeNode;
 
 class HuffmanTree
 {
 public:
-	HuffmanTree(const char* nodeStr, int order = 0);
-	HuffmanTree(std::string nodeStr, int order = 0);
-	HuffmanTree(const BiTree & tree);
+	HuffmanTree(vector<int>& weights);
 
 	~HuffmanTree();
 
-	void printTree(int order=0);
-	int depth();
-	int numOfNode();
-	int numOfLeaf();
-	
 private:
-	pBiTreeNode root;
-	pBiTreeNode buildPreOrderBiTree(const char * nodeStr);
-	void preOrderTraverse(pBiTreeNode node);
-	void midOrderTraverse(pBiTreeNode node);
-	void postOrderTraverse(pBiTreeNode node);
-	void levelOrderTraverse(pBiTreeNode node);
-	void visit(pBiTreeNode node);
-	pBiTreeNode copy(pBiTreeNode node);
-	int calDepth(pBiTreeNode node);
-	int calNodeNum(pBiTreeNode node);
-	int calLeafNum(pBiTreeNode node);
+	pHfmTreeNode hfmTree = nullptr;
+	vector<int> weights;
+	//void buildHfmTreeByLinkedList(vector<ElemType> &weights);
+	void buildHfmTreeByArray();
 };
 
-HuffmanTree::HuffmanTree(const char * nodeStr, int order = 0)
+HuffmanTree::HuffmanTree(vector<int>& weights) :weights(weights)
 {
-	buildPreOrderBiTree(nodeStr);
+	// buildHfmTreeByLinkedList(weights);
 }
 
-HuffmanTree::HuffmanTree(std::string nodeStr, int order = 0)
+void HuffmanTree::buildHfmTreeByArray()
 {
-	buildPreOrderBiTree(nodeStr.c_str());
-}
-
-HuffmanTree::HuffmanTree(const BiTree& tree)
-{
-	root = copy(tree.root);
-}
-
-// print the data of all nodes in the tree, order is to select the traverse approaches, 
-//0 for pre-order, 1 for mid-order and 2 for post-order
-void HuffmanTree::printTree(int order=0)
-{
-	if (root == nullptr)
-		std::cout << "tree is empty!";
-	switch (order)
+	if (weights.size() < 1)
 	{
-	case 0:
-		preOrderTraverse(root);
-		break;
-	case 1:
-		midOrderTraverse(root);
-		break;
-	case 2:
-		postOrderTraverse(root);
-		break;
-	default:
-		std::cout << "bad order!";
-		break;
-	}
-}
-
-pBiTreeNode HuffmanTree::buildPreOrderBiTree(const char* nodeStr)
-{
-	static int idx = 0;
-	if (nodeStr[idx] == '\0')
-	{
-		idx = 0;
 		return;
 	}
-	pBiTreeNode newNode = nullptr;
-	if (nodeStr[idx] != '#')
+	int m = 2 * weights.size() - 1;
+	hfmTree = new HfmTreeNode[m];
+	for (int i = 0; i < weights.size(); i++)
 	{
-		newNode = new BiTreeNode;
-		newNode->data = nodeStr[idx];
-		if (root == nullptr) root = newNode;
-		idx++;
-		newNode->lChild = buildPreOrderBiTree(nodeStr);
-		newNode->rChild = buildPreOrderBiTree(nodeStr);
+		hfmTree[i].weight = weights[i];
 	}
-	return newNode;
-}
-
-void BiTree::preOrderTraverse(pBiTreeNode node)
-{
-	if (node == nullptr)
-		return;
-	else
+	for (int i = weights.size();i<m;i++)
 	{
-		visit(node);
-		preOrderTraverse(node->lChild);
-		preOrderTraverse(node->rChild);
-	}
-	
-}
-
-void BiTree::midOrderTraverse(pBiTreeNode node)
-{
-	/* recursive implementation
-	if (node == nullptr)
-		return;
-	else
-	{
-		preOrderTraverse(node->lChild);
-		visit(node);
-		preOrderTraverse(node->rChild);
-	}
-	*/
-	// non-recursive implementation, exploit stack
-	std::stack<pBiTreeNode> nodeStk;
-	pBiTreeNode tmp = node;
-	while (tmp || !nodeStk.empty())
-	{
-		if (tmp !=nullptr)
+		// find the smallest two weights
+		int min, secMin, j, minIdx=0, secMinIdx=0;
+		for (j=0;j<i-1;j++)
 		{
-			nodeStk.push(tmp);
-			tmp = tmp->lChild;
+			if (hfmTree[j].parent==0)
+			{
+				min = hfmTree[j].weight;
+				secMin = hfmTree[j].weight;
+				minIdx = secMinIdx = j;
+				break;
+			}
 		}
-		else
+		for (int k=j;k<i-1;k++)
 		{
-			visit(nodeStk.top());
-			tmp = nodeStk.top()->rChild;
-			nodeStk.pop();
+			if (hfmTree[k].parent == 0&& hfmTree[k].weight<min)
+			{
+				min = hfmTree[k].weight;
+				minIdx = k;
+			}
+			else if (hfmTree[k].parent == 0 && hfmTree[k].weight < secMin)
+			{
+				secMin = hfmTree[k].weight;
+				secMinIdx = k;
+			}
 		}
+
+		hfmTree[i].weight = hfmTree[minIdx].weight + hfmTree[secMinIdx].weight;
+		hfmTree[i].lChild = minIdx;
+		hfmTree[i].rChild = secMinIdx;
+		hfmTree[minIdx].parent = hfmTree[secMinIdx].parent = i;
 	}
 }
 
+// linked list implementation
+//void HuffmanTree::buildHfmTreeByLinkedList(vector<int> & weights)
+//{
+//	vector<pHfmTreeNode> forest;
+//	for (auto itm : weights)
+//	{
+//		forest.push_back(new HfmTreeNode(itm));
+//	}
+//	while (forest.size()>1)
+//	{
+//		int minW = forest[0]->weight > forest[1]->weight ? forest[1]->weight : forest[0]->weight;
+//		int secMinW = forest[0]->weight > forest[1]->weight ? forest[0]->weight : forest[1]->weight;
+//		int minIdx = forest[0]->weight > forest[1]->weight ? 1 : 0 , secMinIdx = forest[0]->weight > forest[1]->weight ? 0 : 1;
+//		if (forest.size() > 2)
+//		{
+//			for (int i = 2; i<forest.size();i++)
+//			{
+//				if (forest[i]->weight<minW)
+//				{
+//					minW = forest[i]->weight;
+//					minIdx = i;
+//				}
+//				else if (forest[i]->weight < secMinIdx)
+//				{
+//					secMinW = forest[i]->weight;
+//					secMinIdx = i;
+//				}
+//			}
+//		}
+//		pHfmTreeNode t1 = forest[minIdx], t2 = forest[secMinIdx];
+//		forest.erase(forest.begin() + minIdx);
+//		forest.erase(forest.begin() + secMinIdx);
+//		pHfmTreeNode newTree = new HfmTreeNode(t1->weight + t2->weight);
+//		newTree->lChild = t2;
+//		newTree->rChild = t1;
+//		t1->parent = t2->parent = newTree;
+//		forest.push_back(newTree);
+//	}
+//	root = forest[0];
+//}
 
-void BiTree::postOrderTraverse(pBiTreeNode node)
+HuffmanTree::~HuffmanTree()
 {
-	if (node == nullptr)
-		return;
-	else
+	if (hfmTree!=nullptr)
 	{
-		preOrderTraverse(node->lChild);
-		preOrderTraverse(node->rChild);
-		visit(node);
+		delete[] hfmTree;
 	}
-}
-
-void BiTree::levelOrderTraverse(pBiTreeNode node)
-{
-	if (node == nullptr)
-		return;
-	std::queue<pBiTreeNode> nodeQ;
-	nodeQ.push(node);
-	while (!nodeQ.empty())
-	{
-		visit(nodeQ.front());
-		if (nodeQ.front()->lChild != nullptr)
-			nodeQ.push(nodeQ.front()->lChild);
-		if (nodeQ.front()->rChild != nullptr)
-			nodeQ.push(nodeQ.front()->rChild);
-		nodeQ.pop();
-	}
-}
-
-// do something to the node, print its data here.
-void BiTree::visit(pBiTreeNode node)
-{
-	if(node!=nullptr)
-		std::cout << node->data;
-}
-
-pBiTreeNode BiTree::copy(pBiTreeNode node)
-{
-	if (node == nullptr)
-		return nullptr;
-	else
-	{
-		pBiTreeNode newNode = new BiTreeNode;
-		newNode->data = node->data;
-		newNode->lChild = copy(node->lChild);
-		newNode->rChild = copy(node->rChild);
-		return newNode;
-	}
-}
-
-int BiTree::depth()
-{
-	return calDepth(root);
-}
-
-int BiTree::calDepth(pBiTreeNode node)
-{
-	if (node == nullptr)
-		return 0;
-	else
-	{
-		int lDepth = calDepth(node->lChild);
-		int rDepth = calDepth(node->rChild);
-		return lDepth > rDepth ? lDepth + 1 : rDepth + 1;
-	}
-}
-
-int BiTree::numOfNode()
-{
-	return calNodeNum(root);
-}
-
-int BiTree::calNodeNum(pBiTreeNode node)
-{
-	if (node == nullptr)
-		return 0;
-	else
-		return calNodeNum(node->lChild) + calNodeNum(node->rChild) + 1;
-}
-
-int BiTree::numOfLeaf()
-{
-	return calNodeNum(root);
-}
-
-int BiTree::calLeafNum(pBiTreeNode node)
-{
-	if (node == nullptr)
-		return 0;
-	if (node->lChild == nullptr && node->rChild == nullptr)
-		return 1;
-	else
-		return calLeafNum(node->lChild) + calLeafNum(node->rChild);
-}
-
-BiTree::~BiTree()
-{
-
 }
