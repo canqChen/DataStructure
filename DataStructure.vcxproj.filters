@@ -57,11 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Sorting Algorithm\Sorting Algorithm.cpp">
-      <Filter>Sorting Algorithm</Filter>
-    </ClCompile>
     <ClCompile Include="Search Algorithm\Search Algorithm.cpp">
       <Filter>Search Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="Sorting Algorithm\Sorting Algorithm.h">
+      <Filter>Sorting Algorithm</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

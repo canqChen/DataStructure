@@ -22,24 +22,27 @@ typedef struct ActNode
 	int weight;
 }ActNode, pActNode;
 
-class AMGraph
+class Graph
 {
 public:
-	AMGraph(vector<int>& vtxList, vector<vector<int>> & adjMat);
+	Graph(vector<int>& vtxList, vector<vector<int>>& adjMat);  // adjacent matrix initialization
+	Graph(vector<int>& vtxList, vector<vector<int>>& adjMat);  // adjacent list
 
-	~AMGraph();
+	~Graph();
 
 private:
-	vector<int> vtxList;
+	vector<int> vtxListBymat;
 	vector<vector<int>> adjMat;
+	pVtxNode vtxListBylist;
+	int vtxNum, arcNum;
 };
 
-AMGraph::AMGraph(vector<int>& vtxList, vector<vector<int>>& adjMat) :vtxList(vtxList), adjMat(adjMat)
+Graph::Graph(vector<int>& vtxList, vector<vector<int>>& adjMat) :vtxList(vtxList), adjMat(adjMat)
 {
 
 }
 
-AMGraph::~AMGraph()
+Graph::~Graph()
 {
 
 }

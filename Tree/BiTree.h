@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __BiTree__
+#define __BiTree__
+
+
 #include<iostream>
 #include <stack>
 #include <Queue>
@@ -262,3 +265,6 @@ BiTree::~BiTree()
 {
 	destroyTree();
 }
+
+
+#endif

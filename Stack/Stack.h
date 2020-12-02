@@ -1,60 +1,76 @@
-#pragma once
+#ifndef __Stack__
+#define __Stack__
 #include<iostream>
+#include<exception>
 
-#define ElemType int
-#define MAXSIZE 100
 
 using namespace std;
 
-typedef struct stackNode {
-	ElemType data;
-	struct stackNode* next;
-}StkNode, * pStkNode;
+template<typename T>
+struct stackNode {
+	T data;
+	stackNode * next;
+	stackNode() : next(nullptr) {}
+};
 
+template<typename T>
 class SeqStack
 {
 public:
-	SeqStack(int maxSize = MAXSIZE)
+	SeqStack() : size(0), top(0), capacity(100)
 	{
-		stack = new ElemType[maxSize];
-
+		stack = new T[capacity];
 		if (stack == nullptr)
-		{
-			throw string("fail to allocate memory.");
-		}
-		this->maxSize = maxSize;
-		size = 0;
-		top = 0;
+			throw exception("fail to allocate memory.");
 	}
 
-	void push(ElemType ele)
+	SeqStack(size_t capacity): size(0), top(0), capacity(capacity)
 	{
+		stack = new T[capacity];
+
 		if (stack == nullptr)
-			throw string("the stack is not initialized!");
-		else if(size==maxSize)
-			throw string("Stack overflow!");
+			throw exception("fail to allocate memory.");
+	}
+
+	SeqStack(const SeqStack& stk):size(stk.size), top(stk.top), capacity(stk.capacity)
+	{
+		stack = new T[capacity];
+		if (stack == nullptr)
+			throw exception("fail to allocate memory.");
+
+		for (size_t i = 0; i < size; i++)
+			stack[i] = stk.stack[i];
+	}
+
+	void push(T ele)
+	{
+		if (size == capacity) //expand capacity
+			expand();
 			
 		stack[top++] = ele;
 		size++;
 	}
 
-	ElemType pop()
+	void pop()
 	{
-		if (is_empty())
-		{
-			throw string("Stack underflow!");
-		}
+		if (empty())
+			throw exception("Stack underflow!");
+
 		size--;
-		return stack[--top];
+		top--;
 	}
 
-	ElemType getTop()
+	T top()
 	{
-		if (is_empty())
-		{
-			throw string("the stack is empty!");
-		}
+		if (empty())
+			throw exception("the stack is empty!");
+
 		return stack[top-1];
+	}
+
+	size_t size()
+	{
+		return size;
 	}
 
 	void clear()
@@ -66,20 +82,31 @@ public:
 		}
 	}
 
+	bool empty()
+	{
+		return size == 0 ? true : false;
+	}
+
 	~SeqStack() 
 	{
-		delete[] stack;
+		destroy();
 	}
 
 private:
-	ElemType* stack;
-	int size;
-	int top;
-	int maxSize;
+	T* stack;
+	size_t size;
+	size_t top;
+	size_t capacity;
 
-	bool is_empty()
+	void expand()
 	{
-		return size == 0 ? true : false;
+		capacity *= 2
+		T* tmp = new T[capacity];
+		for (size_t i=0; i<size; i++)
+			tmp[i] = stack[i];
+
+		delete[] stack;
+		stack = tmp;
 	}
 
 	void destroy()
@@ -95,71 +122,71 @@ private:
 };
 
 
+
+
+template<typename T>
 class LinkedStack
 {
 public:
-	LinkedStack()
+	LinkedStack(): top(nullptr), size(0)
 	{
-		top = nullptr;
-		length = 0;
 	}
 
 	~LinkedStack()
 	{
-		clear();
+		destroy();
 	}
 
-	int getLength()
+	size_t size()
 	{
-		return length;
+		return size;
 	}
 
-	void push(ElemType ele)
+	void push(T ele)
 	{
-		pStkNode newNode = new StkNode;
+		stackNode<T> * newNode = new stackNode<T>();
 		newNode->data = ele;
 		newNode->next = top;
 		top = newNode;
-		length++;
+		size++;
 	}
 
-	ElemType pop()
+	void pop()
 	{
 		if (top == nullptr)
-		{
-			throw string("the stack is empty");
-		}
-		ElemType ret = top->data;
-		pStkNode tmp = top;
+			throw string("stack underflow");
+		T ret = top->data;
+		stackNode<T> * tmp = top;
 		top = top->next;
 		delete tmp;
-		length--;
+		size--;
 		return ret;
 	}
 
-	ElemType getTop()
+	T top()
 	{
 		if (top==nullptr)
-		{
 			throw string("the stack is empty");
-		}
+
 		return top->data;
 	}
 
-	void clear()
+private:
+	stackNode<T> * top;
+	size_t size;
+
+	void destroy()
 	{
 		if (top != nullptr)
 		{
 			while (top != nullptr)
 			{
-				pStkNode tmp = top;
+				stackNode<T>* tmp = top;
 				top = top->next;
 				delete tmp;
 			}
 		}
 	}
-private:
-	pStkNode top;
-	int length;
-
 };
+
+#endif

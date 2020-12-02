@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MyString__
+#define __MyString__
 #include<iostream>
 #include<cstring>
 
@@ -326,3 +327,6 @@ private:
 	char* str = nullptr;
 	int capacity = MAXLENGTH;
 };
+
+
+#endif

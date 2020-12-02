@@ -1,3 +1,7 @@
+#ifndef __SortingAlgorithm__
+#define __SortingAlgorithm__
+
+
 // implementation of different sorting algorithm
 
 void swap(int& a, int& b)
@@ -6,6 +10,11 @@ void swap(int& a, int& b)
 	b = a - b;
 	a = a - b;
 }
+
+
+/*******************************
+based on comparison
+*******************************/
 
 void bubbleSort(int array[], int length)
 {
@@ -37,6 +46,11 @@ void selectionSort(int array[], int length)
 	}
 }
 
+
+/*******************************
+based on insertion
+*******************************/
+
 void insertionSort(int array[], int length)
 {
 	for (int i = 1; i < length; i++)
@@ -51,6 +65,30 @@ void insertionSort(int array[], int length)
 		array[j+1] = tmp;
 	}
 }
+
+void binaryInsertionSort(int array[], int length)
+{
+	for (int i = 1; i < length; i++)
+	{
+		int tmp = array[i];
+		int low = 0, high = i - 1;
+
+		while (low<=high)
+		{
+			int mid = (low + high) / 2;
+			if (array[mid] > tmp)
+				high = mid - 1;
+			else
+				low = mid + 1;
+		}
+		for (int j = i; j >= high + 2; j--)
+		{
+			array[j] = array[j - 1];
+		}
+		array[high + 1] = tmp;
+	}
+}
+
 
 
 // serves for shell sort
@@ -68,7 +106,7 @@ void insertionSort(int array[], int gap, int idx)
 
 void shellSort(int array[], int length)
 {
-	for (gap = length / 2; gap > 0; gap /= 2)
+	for (int gap = length / 2; gap > 0; gap /= 2)
 	{
 		for (int i = gap; i<length; i++)
 		{
@@ -76,3 +114,5 @@ void shellSort(int array[], int length)
 		}
 	}
 }
+
+#endif

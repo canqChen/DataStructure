@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __HuffmanTree__
+#define __HuffmanTree__
+
 #include<iostream>
 #include <stack>
 #include <Queue>
@@ -136,3 +138,6 @@ HuffmanTree::~HuffmanTree()
 		delete[] hfmTree;
 	}
 }
+
+
+#endif
