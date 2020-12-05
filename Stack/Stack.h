@@ -8,7 +8,7 @@ using namespace std;
 template<typename T>
 struct stackNode {
 	T data;
-	stackNode* next;
+	stackNode<T> * next;
 	stackNode() : next(nullptr) {}
 };
 

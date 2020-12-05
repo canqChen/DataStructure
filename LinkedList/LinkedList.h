@@ -1,100 +1,45 @@
-#pragma once
+#ifndef __LINKEDLIST__
+#define __LINKEDLIST__
 
 #include<iostream>
 
-typedef int ELETYPE;
 
 using namespace std;
 
-typedef struct Lnode {
-	ELETYPE data;
-	struct Lnode* next;
-}Lnode, * pLnode, * LList;
+template<typename T>
+struct ListNode {
+	T data;
+	ListNode<T>* next;
+	ListNode() : next(nullptr) {};
+};
 
+template<typename T>
 class LinkedList
 {
 public:
-	LinkedList()
-	{
-		head = new Lnode;
-		head->next = nullptr;
-		this->length = 0;
-	}
+	LinkedList();
 
-	LinkedList(const LinkedList & list)  //use an exsist linked list to initialize 
-	{
-		destroy();
-		this->head = new Lnode;
-		this->head->next = nullptr;
-		this->length = list.length;
-
-		const pLnode l_head = list.head;
-		pLnode cur_node = head;
-		
-		pLnode l_cur_node = l_head->next;
-		while (l_cur_node !=nullptr)
-		{
-			pLnode new_node = new Lnode;
-			new_node->data = l_cur_node->data;
-			new_node->next = nullptr;
-
-			cur_node->next = new_node;
-
-			cur_node = cur_node->next;
-			l_cur_node = l_cur_node->next;
-		}
-
-
-	}
-
+	LinkedList(const LinkedList<T>& list);
 	~LinkedList()
 	{
-		if (head != nullptr)
-		{
-			delete head;
-		}
+		destroy();
 	}
 
-	void extend(const LinkedList& list)    //merge another liked list
-	{
-		
-		this->length += list.length;
+	void extend(const LinkedList<T>& list);
 
-		const pLnode l_head = list.head;
-		pLnode cur_node = head;
-
-		while (cur_node->next!=nullptr)
-		{
-			cur_node = cur_node->next;
-		}
-
-		pLnode l_cur_node = l_head->next;
-		while (l_cur_node != nullptr)
-		{
-			pLnode new_node = new Lnode;
-			new_node->data = l_cur_node->data;
-			new_node->next = nullptr;
-
-			cur_node->next = new_node;
-
-			cur_node = cur_node->next;
-			l_cur_node = l_cur_node->next;
-		}
-	}
-
-	int getLength()
+	size_t getLength() const
 	{
 		return length;
 	}
 
-	ELETYPE getElementAt(int pos)
+	T& getElementAt(int pos)
 	{
 		if (pos<1 || pos>length)
 		{
 			throw string("wrong position");
 		}
-		check_list();
-		pLnode cur_node = head;
+
+		LinkedList<T>* cur_node = head;
 
 		do
 		{
@@ -105,12 +50,12 @@ public:
 		return cur_node->data;
 	}
 
-	int getPosition(ELETYPE ele)
+	size_t getPosition(T& ele)
 	{
-		pLnode cur_node = head;
-		int pos = 0;
+		LinkedList<T>* cur_node = head;
+		size_t pos = 0;
 
-		for (int i = 1; i <= length; i++)
+		for (int size_t = 1; i <= length; i++)
 		{
 			cur_node = cur_node->next;
 			if (cur_node->data = ele)
@@ -122,11 +67,10 @@ public:
 		throw string("element not found!");
 	}
 
-	pLnode getAddress(ELETYPE ele)
+	LinkedList<T>* getAddress(T ele)
 	{
-		check_list();
 
-		pLnode cur_node = head->next;
+		LinkedList<T>* cur_node = head->next;
 
 		while (cur_node != nullptr)
 		{
@@ -140,11 +84,11 @@ public:
 		throw string("element not found!");
 	}
 
-	void insert(ELETYPE ele, int pos = -1)
+	void insert(T ele, int pos = -1)
 	{
 		if (pos==-1) //default, insert to the tail
 		{
-			pLnode cur_node = head;
+			LinkedList<T>* cur_node = head;
 			while (1)
 			{
 				if (cur_node->next==nullptr)
@@ -153,7 +97,7 @@ public:
 				}
 				cur_node = cur_node->next;
 			}
-			pLnode newNode = new Lnode;
+			LinkedList<T>* newNode = new LinkedList<T>();
 			newNode->data = ele;
 			newNode->next = nullptr;
 			cur_node->next = newNode;
@@ -167,12 +111,12 @@ public:
 		}
 
 		// insert to the middle
-		pLnode cur_node = head;
+		LinkedList<T>* cur_node = head;
 		for (int i = 1; i<=pos-1;i++)
 		{
 			cur_node = cur_node->next;
 		}
-		pLnode newNode = new Lnode;
+		LinkedList<T>* newNode = new LinkedList<T>();
 		newNode->data = ele;
 		newNode->next = cur_node->next;
 		cur_node->next = newNode;
@@ -181,34 +125,31 @@ public:
 
 	void removeNodeByPosition(int pos)
 	{
-		check_list();
 		if (pos<1 || pos>length)
 		{
 			throw string("wrong position");
 		}
 
-		pLnode cur_node = head;
+		LinkedList<T>* cur_node = head;
 
 		for (int i = 1; i <= pos - 1; i++)
 		{
 			cur_node = cur_node->next;
 		}
-		pLnode temp = cur_node->next;
+		LinkedList<T>* temp = cur_node->next;
 		cur_node->next = (cur_node->next)->next;
 		delete temp;
 	}
 
-	void removeNodeByValue(ELETYPE ele, bool rmAll = false)
+	void removeNodeByValue(T& ele, bool rmAll = false)
 	{
-		check_list();
-
-		pLnode cur_node = head;
+		LinkedList<T>* cur_node = head;
 
 		while ((cur_node->next) != nullptr)
 		{
 			if ((cur_node->next)->data == ele)
 			{
-				pLnode temp = cur_node->next;
+				LinkedList<T>* temp = cur_node->next;
 				cur_node->next = temp->next;
 				delete temp;
 				if (rmAll)
@@ -222,8 +163,7 @@ public:
 
 	void print()
 	{
-		check_list();
-		pLnode cur_node = head->next;
+		LinkedList<T>* cur_node = head->next;
 		while (cur_node!=nullptr)
 		{
 			cout << cur_node->data<<"  ";
@@ -231,28 +171,18 @@ public:
 		}
 	}
 
-	bool is_empty()
+	bool empty() const
 	{
 		//return (head->next == nullptr ? true : false);
 		return (length < 1 ? true : false);
 	}
 
-	void destroy()
-	{
-		pLnode temp;
-		while (head != nullptr)
-		{
-			temp = head;
-			head = head->next;
-			delete temp;
-		}
-		length = 0;
-	}
+	void destroy();
 
 	void clear()
 	{
-		pLnode first_node = head->next;
-		pLnode temp;
+		LinkedList<T>* first_node = head->next;
+		LinkedList<T>* temp;
 		while (first_node != nullptr)
 		{
 			temp = first_node;
@@ -265,14 +195,82 @@ public:
 
 
 private:
-	pLnode head;
-	int length;
-
-	void check_list()
-	{
-		if (is_empty())
-		{
-			throw string("the linked list is empty!");
-		}
-	}
+	ListNode<T> * head;
+	size_t length;
 };
+
+
+
+#endif
+
+template<typename T>
+LinkedList<T>::LinkedList(): head(nullptr), length(0)
+{
+	head = new LinkedList<T>();
+}
+
+template<typename T>
+LinkedList<T>::LinkedList(const LinkedList<T>& list)
+{
+	destroy();
+	this->head = new LinkedList<T>();
+	this->head->next = nullptr;
+	this->length = list.length;
+
+	const LinkedList<T> * l_head = list.head;
+	LinkedList<T>* cur_node = head;
+
+	LinkedList<T>* l_cur_node = l_head->next;
+	while (l_cur_node != nullptr)
+	{
+		LinkedList<T>* new_node = new LinkedList<T>();
+		new_node->data = l_cur_node->data;
+		new_node->next = nullptr;
+
+		cur_node->next = new_node;
+
+		cur_node = cur_node->next;
+		l_cur_node = l_cur_node->next;
+	}
+}
+
+template<typename T>
+void LinkedList<T>::extend(const LinkedList<T>& list)
+{
+	this->length += list.length;
+
+	const LinkedList<T>* l_head = list.head;
+	LinkedList<T>* cur_node = head;
+
+	while (cur_node->next != nullptr)
+	{
+		cur_node = cur_node->next;
+	}
+
+	LinkedList<T>* l_cur_node = l_head->next;
+	while (l_cur_node != nullptr)
+	{
+		LinkedList<T>* new_node = new LinkedList<T>();
+		new_node->data = l_cur_node->data;
+		new_node->next = nullptr;
+
+		cur_node->next = new_node;
+
+		cur_node = cur_node->next;
+		l_cur_node = l_cur_node->next;
+	}
+}
+
+template<typename T>
+void LinkedList<T>::destroy()
+{
+	LinkedList<T>* temp;
+	while (head != nullptr)
+	{
+		temp = head;
+		head = head->next;
+		delete temp;
+		temp = nullptr;
+	}
+	length = 0;
+}
