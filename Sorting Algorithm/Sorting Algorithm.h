@@ -57,13 +57,17 @@ void selectionSort(int array[], int length)
 				minIdx = j;
 			}
 		}
-		swap(array[i], array[minIdx]);
+		if (minIdx!=i)
+		{
+			swap(array[i], array[minIdx]);
+		}
 	}
 }
 
 
 int partition(int array[], int low, int high)
 {
+	//swap(array[low], array[(low + high) / 2]);   // select the middle element as pivot
 	int pivot = array[low];
 	while (low < high)
 	{
@@ -72,15 +76,21 @@ int partition(int array[], int low, int high)
 		array[low] = array[high];
 		while (low < high && array[low] < pivot)
 			low++;
+		array[high] = array[low];
 	}
 	array[low] = pivot;
 	return low;
 }
 
 /* recursive quick sort  */
-void quickSort(int array[], int length)
+void quickSort(int array[], int low, int high)
 {
-	
+	if (low < high)
+	{
+		int pivotIdx = partition(array, low, high);
+		quickSort(array, low, pivotIdx);
+		quickSort(array, pivotIdx, high);
+	}
 }
 
 /*******************************

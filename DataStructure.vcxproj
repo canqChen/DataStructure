@@ -145,7 +145,7 @@
     <ClInclude Include="Queue\Queue.h" />
     <ClInclude Include="SeqList\SeqList.h" />
     <ClInclude Include="Stack\Stack.h" />
-    <ClInclude Include="Tree\BiTree.h" />
+    <ClInclude Include="Tree\BSTree.h" />
     <ClInclude Include="Tree\HuffmanTree.h" />
   </ItemGroup>
   <ItemGroup>

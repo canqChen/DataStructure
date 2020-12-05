@@ -45,14 +45,14 @@
     <ClInclude Include="MyString\MyString.h">
       <Filter>MyString</Filter>
     </ClInclude>
-    <ClInclude Include="Tree\BiTree.h">
-      <Filter>Tree</Filter>
-    </ClInclude>
     <ClInclude Include="Tree\HuffmanTree.h">
       <Filter>Tree</Filter>
     </ClInclude>
     <ClInclude Include="Graph\Graph.h">
       <Filter>Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\BSTree.h">
+      <Filter>Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
