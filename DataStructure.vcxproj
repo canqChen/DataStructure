@@ -152,6 +152,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Search Algorithm\Search Algorithm.cpp" />
     <ClCompile Include="Sorting Algorithm\Sorting Algorithm.h" />
+    <ClCompile Include="Stack\Stack.cpp" />
+    <ClCompile Include="Tree\BSTree.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

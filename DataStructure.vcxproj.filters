@@ -63,5 +63,11 @@
     <ClCompile Include="Sorting Algorithm\Sorting Algorithm.h">
       <Filter>Sorting Algorithm</Filter>
     </ClCompile>
+    <ClCompile Include="Tree\BSTree.cpp">
+      <Filter>Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="Stack\Stack.cpp">
+      <Filter>Stack</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

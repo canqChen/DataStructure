@@ -200,9 +200,6 @@ private:
 };
 
 
-
-#endif
-
 template<typename T>
 LinkedList<T>::LinkedList(): head(nullptr), length(0)
 {
@@ -274,3 +271,6 @@ void LinkedList<T>::destroy()
 	}
 	length = 0;
 }
+
+
+#endif
