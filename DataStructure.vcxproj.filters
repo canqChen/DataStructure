@@ -69,5 +69,8 @@
     <ClCompile Include="Stack\Stack.cpp">
       <Filter>Stack</Filter>
     </ClCompile>
+    <ClCompile Include="Sorting Algorithm\Sorting Algorithm.cpp">
+      <Filter>Sorting Algorithm</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
