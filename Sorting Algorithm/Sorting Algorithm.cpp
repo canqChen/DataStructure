@@ -174,16 +174,37 @@ void selectionSort(int array[], int length)
 
 void heapSort(int array[], int length)
 {
+	buildHeap(array, length);
+	for (int i = length - 1; i >= 0; i--)
+	{
+		swap(array[0], array[i]);   // move the largest to the end
+		adjustHeap(array, 0, i - 1);
+	}
 }
 
 void buildHeap(int array[], int length)
 {
+	for (int i = length / 2 -1; i >= 0; i--)  // from bottom to top
+		adjustHeap(array, i, length - 1);
 }
 
-void adjustHeap(int array[], int root, int length)
+void adjustHeap(int array[], int root, int last)
 {
+	int larger = 2 * root + 1;
+	while (larger <= last)  // have at least one child
+	{
+		if (larger < last && array[larger] < array[larger + 1])  // have tow children, and the right 
+			larger++;												// child is larger than the left, 
+		if (array[root] > array[larger])							//"larger" points to the right child
+		{
+			swap(array[root], array[larger]);
+			root = larger;
+			larger = 2 * root + 1;   // go to next level
+		}
+		else
+			break;   //satisfy the heap property, exit
+	}
 }
-
 
 /*******************************
 merge sort

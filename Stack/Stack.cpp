@@ -47,7 +47,7 @@ void SeqStack<T>::pop()
 }
 
 template<typename T>
-T& SeqStack<T>::top()
+T SeqStack<T>::top()
 {
 	if (empty())
 		throw exception("stack underflow!");
@@ -105,7 +105,7 @@ void SeqStack<T>::destroy()
 
 
 template<typename T>
-void LinkedStack<T>::push(T& ele)
+void LinkedStack<T>::push(const T& ele)
 {
 	stackNode<T>* newNode = new stackNode<T>(ele);
 	newNode->next = tp;

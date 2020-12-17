@@ -1,23 +1,24 @@
-#include "BSTree.h"
+#include "AVLTree.h"
 
 
 template<typename T>
-BSTree<T>::BSTree(const BSTree<T>& tree)
+AVLTree<T>::AVLTree(const AVLTree<T>& tree)
 {
 	root = copy(tree.root);
 }
 
 template<typename T>
-BSTree<T>::BSTree(vector<T> vec)
+AVLTree<T>::AVLTree(vector<T> vec)
 {
 	sort(vec.begin(), vec.end());
+	buildBalancedTreeFromVector(vec, 0, vec.size());
 }
 
 template<typename T>
-void BSTree<T>::clear()
+void AVLTree<T>::clear()
 {
-	std::stack<TreeNode<T>*> nodeStk;
-	TreeNode<T>* tmp = root;
+	std::stack<pTreeNode> nodeStk;
+	pTreeNode tmp = root;
 	while (tmp || !nodeStk.empty())
 	{
 		if (tmp != nullptr)
@@ -36,14 +37,14 @@ void BSTree<T>::clear()
 }
 
 template<typename T>
-void BSTree<T>::insert(const T& ele)
+void AVLTree<T>::insert(const T& ele)
 {
 	if (root == nullptr)
 	{
 		root = new TreeNode<T>(ele);
 		return;
 	}
-	TreeNode<T>* tmp = root, * preNode;
+	pTreeNode tmp = root, * preNode;
 	while (tmp != nullptr)
 	{
 		preNode = tmp;
@@ -54,22 +55,22 @@ void BSTree<T>::insert(const T& ele)
 		else // already exists
 			return;
 	}
-	TreeNode<T>* newNode = new TreeNode<T>(ele);
+	pTreeNode newNode = new TreeNode<T>(ele);
 	if (preNode->data > ele)
 		preNode->left = newNode;
 	else if (preNode->right < ele)
-		TreeNode<T>* newNode = new TreeNode<T>(ele);
+		pTreeNode newNode = new TreeNode<T>(ele);
 }
 
 template<typename T>
-void BSTree<T>::erase(const T& ele)
+void AVLTree<T>::erase(const T& ele)
 {
 	if (empty())
 	{
 		count << "The tree is empty!";
 		return;
 	}
-	TreeNode<T>* tmp = root, * preNode;
+	pTreeNode tmp = root, * preNode;
 	// find node to be erased
 	while (tmp != nullptr)
 	{
@@ -93,9 +94,9 @@ void BSTree<T>::erase(const T& ele)
 }
 
 template<typename T>
-void BSTree<T>::deleteByMerging(TreeNode<T>* node)
+void AVLTree<T>::deleteByMerging(pTreeNode node)
 {
-	TreeNode<T>* tmp = node;
+	pTreeNode tmp = node;
 
 	// leaf node or only one child
 	if (node->left == nullptr)
@@ -104,7 +105,7 @@ void BSTree<T>::deleteByMerging(TreeNode<T>* node)
 		node = node->left;
 	else  // two children
 	{
-		TreeNode<T>* tmp = node->left;
+		pTreeNode tmp = node->left;
 		while (tmp->right != nullptr)
 			tmp = tmp->right;
 		tmp->right = node->right;
@@ -115,9 +116,9 @@ void BSTree<T>::deleteByMerging(TreeNode<T>* node)
 }
 
 template<typename T>
-void BSTree<T>::deleteByCopying(TreeNode<T>* node)
+void AVLTree<T>::deleteByCopying(pTreeNode node)
 {
-	TreeNode<T>* tmp = node, * prevNode = node;
+	pTreeNode tmp = node, * prevNode = node;
 
 	// leaf node or only one child
 	if (node->left == nullptr)
@@ -126,7 +127,7 @@ void BSTree<T>::deleteByCopying(TreeNode<T>* node)
 		node = node->left;
 	else  // two children
 	{
-		TreeNode<T>* tmp = node->left;
+		pTreeNode tmp = node->left;
 		while (tmp->right != nullptr)
 		{
 			prevNode = tmp;
@@ -142,9 +143,20 @@ void BSTree<T>::deleteByCopying(TreeNode<T>* node)
 }
 
 template<typename T>
-TreeNode<T>* BSTree<T>::search(const T& ele)
+void AVLTree<T>::buildBalancedTreeFromVector(vector<T>& vec, int start, int end)
 {
-	TreeNode<T>* tmp = root;
+	if (start > mid)
+		return;
+	int mid = (start + end) / 2;
+	insert(vec[mid]);
+	buildBalancedTreeFromVector(vec, start, mid);
+	buildBalancedTreeFromVector(vec, mid + 1, end);
+}
+
+template<typename T>
+bool AVLTree<T>::search(const T& ele)
+{
+	pTreeNode tmp = root;
 	while (tmp != nullptr)
 	{
 		if (tmp->data < ele)
@@ -152,13 +164,13 @@ TreeNode<T>* BSTree<T>::search(const T& ele)
 		else if (tmp->data > ele)
 			tmp = tmp->left;
 		else
-			return tmp;
+			return true;
 	}
-	return nullptr;
+	return false;
 }
 
 template<typename T>
-vector<T>& BSTree<T>::preOrderTraverse(TreeNode<T>* node)
+vector<T>& AVLTree<T>::preOrderTraverse(pTreeNode node)
 {
 	// recursive implementation
 	//vector<T> ret;
@@ -174,8 +186,8 @@ vector<T>& BSTree<T>::preOrderTraverse(TreeNode<T>* node)
 
 	// iterative implementation
 	vector<T> ret;
-	stack<TreeNode<T>*> nodeStk;
-	TreeNode<T>* tmp = node;
+	stack<pTreeNode> nodeStk;
+	pTreeNode tmp = node;
 	while (tmp || !nodeStk.empty())
 	{
 		while (tmp != nullptr)
@@ -192,7 +204,7 @@ vector<T>& BSTree<T>::preOrderTraverse(TreeNode<T>* node)
 }
 
 template<typename T>
-vector<T>& BSTree<T>::midOrderTraverse(TreeNode<T>* node)
+vector<T>& AVLTree<T>::midOrderTraverse(pTreeNode node)
 {
 	// recursive implementation
 	// vector<T> ret;
@@ -208,8 +220,8 @@ vector<T>& BSTree<T>::midOrderTraverse(TreeNode<T>* node)
 
 	// iterative implementation, exploit stack
 	vector<T> ret;
-	std::stack<TreeNode<T>*> nodeStk;
-	TreeNode<T>* tmp = node;
+	std::stack<pTreeNode> nodeStk;
+	pTreeNode tmp = node;
 	while (tmp || !nodeStk.empty())
 	{
 		while (tmp != nullptr)
@@ -226,7 +238,7 @@ vector<T>& BSTree<T>::midOrderTraverse(TreeNode<T>* node)
 }
 
 template<typename T>
-vector<T>& BSTree<T>::postOrderTraverse(TreeNode<T>* node)
+vector<T>& AVLTree<T>::postOrderTraverse(pTreeNode node)
 {
 	// recursive implementation
 	//vector<T> ret;
@@ -261,11 +273,11 @@ vector<T>& BSTree<T>::postOrderTraverse(TreeNode<T>* node)
 }
 
 template<typename T>
-vector<T>& BSTree<T>::levelOrderTraverse(TreeNode<T>* node)
+vector<T>& AVLTree<T>::levelOrderTraverse(pTreeNode node)
 {
 	if (node == nullptr)
 		return;
-	std::queue<TreeNode<T>*> nodeQ;
+	std::queue<pTreeNode> nodeQ;
 	vector<T> ret;
 	nodeQ.push(node);
 	while (!nodeQ.empty())
@@ -280,13 +292,13 @@ vector<T>& BSTree<T>::levelOrderTraverse(TreeNode<T>* node)
 }
 
 template<typename T>
-TreeNode<T>* BSTree<T>::copy(TreeNode<T>* node)
+AVLTree<T>::pTreeNode AVLTree<T>::copy(pTreeNode node)
 {
 	if (node == nullptr)
 		return nullptr;
 	else
 	{
-		TreeNode<T>* newNode = new TreeNode<T>();
+		pTreeNode newNode = new TreeNode<T>();
 		newNode->data = node->data;
 		newNode->left = copy(node->left);
 		newNode->right = copy(node->right);
@@ -295,13 +307,13 @@ TreeNode<T>* BSTree<T>::copy(TreeNode<T>* node)
 }
 
 template<typename T>
-BSTree<T>::size_type BSTree<T>::depth()
+AVLTree<T>::size_type AVLTree<T>::depth()
 {
 	return calDepth(root);
 }
 
 template<typename T>
-BSTree<T>::size_type BSTree<T>::calDepth(TreeNode<T>* node)
+AVLTree<T>::size_type AVLTree<T>::calDepth(pTreeNode node)
 {
 	if (node == nullptr)
 		return 0;
@@ -309,19 +321,18 @@ BSTree<T>::size_type BSTree<T>::calDepth(TreeNode<T>* node)
 	{
 		size_type lDepth = calDepth(node->left);
 		size_type rDepth = calDepth(node->right);
-		return lDepth > rDepth ? lDepth + 1 : rDepth + 1;
 		return max(lDepth, rDepth) + 1;
 	}
 }
 
 template<typename T>
-BSTree<T>::size_type BSTree<T>::numOfNode()
+AVLTree<T>::size_type AVLTree<T>::numOfNode()
 {
 	return calNodeNum(root);
 }
 
 template<typename T>
-BSTree<T>::size_type BSTree<T>::calNodeNum(TreeNode<T>* node)
+AVLTree<T>::size_type AVLTree<T>::calNodeNum(pTreeNode node)
 {
 	if (node == nullptr)
 		return 0;
@@ -330,13 +341,13 @@ BSTree<T>::size_type BSTree<T>::calNodeNum(TreeNode<T>* node)
 }
 
 template<typename T>
-BSTree<T>::size_type BSTree<T>::numOfLeaf()
+AVLTree<T>::size_type AVLTree<T>::numOfLeaf()
 {
 	return calNodeNum(root);
 }
 
 template<typename T>
-BSTree<T>::size_type BSTree<T>::calLeafNum(TreeNode<T>* node)
+AVLTree<T>::size_type AVLTree<T>::calLeafNum(pTreeNode node)
 {
 	if (node == nullptr)
 		return 0;
@@ -347,7 +358,7 @@ BSTree<T>::size_type BSTree<T>::calLeafNum(TreeNode<T>* node)
 }
 
 template<typename T>
-BSTree<T>::~BSTree()
+AVLTree<T>::~AVLTree()
 {
 	clear();
 }

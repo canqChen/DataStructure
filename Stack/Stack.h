@@ -30,7 +30,7 @@ public:
 
 	void pop();
 
-	T& top();
+	T top();
 
 	size_type size() const
 	{
@@ -89,7 +89,7 @@ public:
 		return _size;
 	}
 
-	void push(T& ele);
+	void push(const T& ele);
 
 	void pop();
 

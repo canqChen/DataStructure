@@ -51,7 +51,7 @@
     <ClInclude Include="Graph\Graph.h">
       <Filter>Graph</Filter>
     </ClInclude>
-    <ClInclude Include="Tree\BSTree.h">
+    <ClInclude Include="Tree\AVLTree.h">
       <Filter>Tree</Filter>
     </ClInclude>
   </ItemGroup>
@@ -63,14 +63,14 @@
     <ClCompile Include="Sorting Algorithm\Sorting Algorithm.h">
       <Filter>Sorting Algorithm</Filter>
     </ClCompile>
-    <ClCompile Include="Tree\BSTree.cpp">
-      <Filter>Tree</Filter>
-    </ClCompile>
     <ClCompile Include="Stack\Stack.cpp">
       <Filter>Stack</Filter>
     </ClCompile>
     <ClCompile Include="Sorting Algorithm\Sorting Algorithm.cpp">
       <Filter>Sorting Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree\AVLTree.cpp">
+      <Filter>Tree</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
