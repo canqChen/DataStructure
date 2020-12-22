@@ -24,11 +24,11 @@ void AVLTree<T>::clear()
 		if (tmp != nullptr)
 		{
 			nodeStk.push(tmp);
-			tmp = tmp->left;
+			tmp = tmp->getLeft();
 		}
 		else
 		{
-			tmp = nodeStk.top()->right;
+			tmp = nodeStk.top()->getRight();
 			delete nodeStk.top();
 			nodeStk.pop();
 		}
@@ -41,23 +41,23 @@ void AVLTree<T>::insert(const T& ele)
 {
 	if (root == nullptr)
 	{
-		root = new TreeNode<T>(ele);
+		root = createNode(ele);
 		return;
 	}
 	pTreeNode tmp = root, * preNode;
 	while (tmp != nullptr)
 	{
 		preNode = tmp;
-		if (tmp->data > ele)
-			tmp = tmp->left;
-		else if (tmp->data < ele)
-			tmp = tmp->right;
-		else // already exists
+		if (tmp->getVal() > ele)
+			tmp = tmp->getLeft();
+		else if (tmp->getVal() < ele)
+			tmp = tmp->getRight();
+		else // already exists, do nothing
 			return;
 	}
 	pTreeNode newNode = new TreeNode<T>(ele);
-	if (preNode->data > ele)
-		preNode->left = newNode;
+	if (preNode->getVal() > ele)
+		preNode->setLeft(newNode);
 	else if (preNode->right < ele)
 		pTreeNode newNode = new TreeNode<T>(ele);
 }
@@ -74,13 +74,13 @@ void AVLTree<T>::erase(const T& ele)
 	// find node to be erased
 	while (tmp != nullptr)
 	{
-		if (tmp->data == ele)
+		if (tmp->getVal() == ele)
 			break;
 		preNode = tmp;
-		if (tmp->data > ele)
-			tmp = tmp->left;
-		else if (tmp->data < ele)
-			tmp = tmp->right;
+		if (tmp->getVal() > ele)
+			tmp = tmp->getLeft();
+		else if (tmp->getVal() < ele)
+			tmp = tmp->getRight();
 	}
 	if (tmp == nullptr)   // not found
 	{
@@ -89,55 +89,71 @@ void AVLTree<T>::erase(const T& ele)
 	}
 
 	// leaf node or only one child
-	deleteByMerging(tmp);
-	//deleteByCopying(tmp);
+	deleteByMerging(tmp, preNode);
+	//deleteByCopying(tmp, preNode);
 }
 
 template<typename T>
-void AVLTree<T>::deleteByMerging(pTreeNode node)
+void AVLTree<T>::deleteByMerging(pTreeNode & node, pTreeNode & parent)
 {
-	pTreeNode tmp = node;
+	pTreeNode tmp = node, newNode = nullptr;
 
 	// leaf node or only one child
-	if (node->left == nullptr)
-		node = node->right;
-	else if (node->right == nullptr)
-		node = node->left;
+	if (node->getLeft() == nullptr)
+		newNode = node->getRight();
+	else if (node->getRight() == nullptr)
+		newNode = node->getLeft();
 	else  // two children
 	{
-		pTreeNode tmp = node->left;
-		while (tmp->right != nullptr)
-			tmp = tmp->right;
-		tmp->right = node->right;
+		tmp = node->getLeft();   // cannot be nullptr
+		while (tmp->getRight() != nullptr)
+			tmp = tmp->getRight();
+		tmp->setRight(node->getRight());
 		tmp = node;
-		node = node->left;
+		newNode = node->getLeft();
 	}
+
+	if (parent->getLeft() == node)  // the node to be removed is the left child of parent
+		parent->setLeft(newNode);
+	else		//  the node to be removed is the right child of parent
+		parent->setRight(newNode);
+
 	delete tmp;
 }
 
 template<typename T>
-void AVLTree<T>::deleteByCopying(pTreeNode node)
+void AVLTree<T>::deleteByCopying(pTreeNode & node)
 {
-	pTreeNode tmp = node, * prevNode = node;
+	pTreeNode tmp = node, prevNode = node, newNode = nullptr;
 
-	// leaf node or only one child
-	if (node->left == nullptr)
-		node = node->right;
-	else if (node->right == nullptr)
-		node = node->left;
-	else  // two children
+	// leaf node or only one child, directly replace it
+	if (node->getLeft() == nullptr)
 	{
-		pTreeNode tmp = node->left;
-		while (tmp->right != nullptr)
+		if (parent->getLeft() == node)  // the node to be removed is the left child of parent
+			parent->setLeft(node->getRight());
+		else		//  the node to be removed is the right child of parent
+			parent->setRight(node->getRight());
+	}
+	else if (node->getRight() == nullptr)
+	{
+		if (parent->getLeft() == node)  // the node to be removed is the left child of parent
+			parent->setLeft(node->getLeft());
+		else		//  the node to be removed is the right child of parent
+			parent->setRight(node->getLeft());
+	}
+	else  // two children, copy by precursor node
+	{
+		tmp = node->getLeft();  // cannot be nullptr
+		while (tmp->getRight() != nullptr)  // use the previous node to replace it
 		{
 			prevNode = tmp;
-			tmp = tmp->right;
+			tmp = tmp->getRight();
 		}
-		node->data = tmp->data;
+		node->setVal(tmp->getVal());
 		if (prevNode == node)
-			node->left = tmp->left;
+			node->setLeft(tmp->getLeft());
 		else
-			prevNode->right = tmp->left;
+			prevNode->setRight(tmp->getLeft());
 	}
 	delete tmp;
 }
@@ -159,10 +175,10 @@ bool AVLTree<T>::search(const T& ele)
 	pTreeNode tmp = root;
 	while (tmp != nullptr)
 	{
-		if (tmp->data < ele)
-			tmp = tmp->right;
-		else if (tmp->data > ele)
-			tmp = tmp->left;
+		if (tmp->getVal() < ele)
+			tmp = tmp->getRight();
+		else if (tmp->getVal() > ele)
+			tmp = tmp->getLeft();
 		else
 			return true;
 	}
@@ -170,7 +186,7 @@ bool AVLTree<T>::search(const T& ele)
 }
 
 template<typename T>
-vector<T>& AVLTree<T>::preOrderTraverse(pTreeNode node)
+vector<T>& AVLTree<T>::preOrderTraverse(const pTreeNode & node) const
 {
 	// recursive implementation
 	//vector<T> ret;
@@ -179,8 +195,8 @@ vector<T>& AVLTree<T>::preOrderTraverse(pTreeNode node)
 	//else
 	//{
 	//	ret.push_back(node->data);
-	//	preOrderTraverse(node->left);
-	//	preOrderTraverse(node->right);
+	//	preOrderTraverse(node->getLeft());
+	//	preOrderTraverse(node->getRight());
 	//}
 	//return ret;
 
@@ -192,19 +208,19 @@ vector<T>& AVLTree<T>::preOrderTraverse(pTreeNode node)
 	{
 		while (tmp != nullptr)
 		{
-			ret.push_back(nodeStk.top()->data);
+			ret.push_back(nodeStk.top()->getVal());
 			nodeStk.push(tmp);
-			tmp = tmp->left;
+			tmp = tmp->getLeft();
 		}
 
-		tmp = nodeStk.top()->right;
+		tmp = nodeStk.top()->getRight();
 		nodeStk.pop();
 	}
 	return ret;
 }
 
 template<typename T>
-vector<T>& AVLTree<T>::midOrderTraverse(pTreeNode node)
+vector<T>& AVLTree<T>::midOrderTraverse(const pTreeNode & node) const
 {
 	// recursive implementation
 	// vector<T> ret;
@@ -212,9 +228,9 @@ vector<T>& AVLTree<T>::midOrderTraverse(pTreeNode node)
 	//	return;
 	//else
 	//{
-	//	preOrderTraverse(node->left);
+	//	preOrderTraverse(node->getLeft());
 	//	ret.push_back(node->data);
-	//	preOrderTraverse(node->right);
+	//	preOrderTraverse(node->getRight());
 	//}
 	//return ret;
 
@@ -227,18 +243,18 @@ vector<T>& AVLTree<T>::midOrderTraverse(pTreeNode node)
 		while (tmp != nullptr)
 		{
 			nodeStk.push(tmp);
-			tmp = tmp->left;
+			tmp = tmp->getLeft();
 		}
 
-		ret.push_back(nodeStk.top()->data);
-		tmp = nodeStk.top()->right;
+		ret.push_back(nodeStk.top()->getVal());
+		tmp = nodeStk.top()->getRight();
 		nodeStk.pop();
 	}
 	return ret;
 }
 
 template<typename T>
-vector<T>& AVLTree<T>::postOrderTraverse(pTreeNode node)
+vector<T>& AVLTree<T>::postOrderTraverse(const pTreeNode &node) const
 {
 	// recursive implementation
 	//vector<T> ret;
@@ -246,26 +262,26 @@ vector<T>& AVLTree<T>::postOrderTraverse(pTreeNode node)
 	//	return;
 	//else
 	//{
-	//	preOrderTraverse(node->left);
-	//	preOrderTraverse(node->right);
+	//	preOrderTraverse(node->getLeft());
+	//	preOrderTraverse(node->getRight());
 	//	ret.push_back(node->data);
 	//}
 	//return ret;
 
 	// iterative implementation
 	vector<T> ret;
-	stack<TreeNode*> nodeStk;
-	TreeNode* tmp = node;
+	stack<pTreeNode> nodeStk;
+	pTreeNode tmp = node;
 	while (tmp || !nodeStk.empty())
 	{
 		while (tmp != nullptr)
 		{
-			ret.push_back(nodeStk.top()->data);
+			ret.push_back(nodeStk.top()->getVal());
 			nodeStk.push(tmp);
-			tmp = tmp->right;
+			tmp = tmp->getRight();
 		}
 
-		tmp = tmp->left;
+		tmp = tmp->getLeft();
 		nodeStk.pop();
 	}
 	reverse(ret.begin(), ret.end());
@@ -273,7 +289,7 @@ vector<T>& AVLTree<T>::postOrderTraverse(pTreeNode node)
 }
 
 template<typename T>
-vector<T>& AVLTree<T>::levelOrderTraverse(pTreeNode node)
+vector<T>& AVLTree<T>::levelOrderTraverse(const pTreeNode & node)  const
 {
 	if (node == nullptr)
 		return;
@@ -282,79 +298,78 @@ vector<T>& AVLTree<T>::levelOrderTraverse(pTreeNode node)
 	nodeQ.push(node);
 	while (!nodeQ.empty())
 	{
-		ret.push_back(nodeQ.front()->data);
-		if (nodeQ.front()->left != nullptr)
-			nodeQ.push(nodeQ.front()->left);
-		if (nodeQ.front()->right != nullptr)
-			nodeQ.push(nodeQ.front()->right);
+		ret.push_back(nodeQ.front()->getVal());
+		if (nodeQ.front()->getLeft() != nullptr)
+			nodeQ.push(nodeQ.front()->getLeft());
+		if (nodeQ.front()->getRight() != nullptr)
+			nodeQ.push(nodeQ.front()->getRight());
 		nodeQ.pop();
 	}
 }
 
 template<typename T>
-AVLTree<T>::pTreeNode AVLTree<T>::copy(pTreeNode node)
+AVLTree<T>::pTreeNode AVLTree<T>::copy(const pTreeNode & node)
 {
 	if (node == nullptr)
 		return nullptr;
 	else
 	{
-		pTreeNode newNode = new TreeNode<T>();
-		newNode->data = node->data;
-		newNode->left = copy(node->left);
-		newNode->right = copy(node->right);
+		pTreeNode newNode = createNode(node->getVal(), node->getBalancedFactor());
+		newNode->setLeft(copy(node->getLeft()));
+		newNode->setRight(copy(node->getRight()));
 		return newNode;
 	}
 }
 
 template<typename T>
-AVLTree<T>::size_type AVLTree<T>::depth()
+AVLTree<T>::size_type AVLTree<T>::depth()  const
 {
 	return calDepth(root);
 }
 
 template<typename T>
-AVLTree<T>::size_type AVLTree<T>::calDepth(pTreeNode node)
+AVLTree<T>::size_type AVLTree<T>::calDepth(const pTreeNode &node)  const
 {
 	if (node == nullptr)
 		return 0;
 	else
 	{
-		size_type lDepth = calDepth(node->left);
-		size_type rDepth = calDepth(node->right);
+		size_type lDepth = calDepth(node->getLeft());
+		size_type rDepth = calDepth(node->getRight());
 		return max(lDepth, rDepth) + 1;
 	}
 }
 
 template<typename T>
-AVLTree<T>::size_type AVLTree<T>::numOfNode()
+AVLTree<T>::size_type AVLTree<T>::nodeNum()  const
 {
 	return calNodeNum(root);
 }
 
 template<typename T>
-AVLTree<T>::size_type AVLTree<T>::calNodeNum(pTreeNode node)
+AVLTree<T>::size_type AVLTree<T>::calNodeNum(const pTreeNode &node)  const
 {
 	if (node == nullptr)
 		return 0;
 	else
-		return calNodeNum(node->left) + calNodeNum(node->right) + 1;
+		return calNodeNum(node->getLeft()) + calNodeNum(node->getRight()) + 1;
 }
 
 template<typename T>
-AVLTree<T>::size_type AVLTree<T>::numOfLeaf()
+AVLTree<T>::size_type AVLTree<T>::leafNum()  const
 {
 	return calNodeNum(root);
 }
 
 template<typename T>
-AVLTree<T>::size_type AVLTree<T>::calLeafNum(pTreeNode node)
+AVLTree<T>::size_type AVLTree<T>::calLeafNum(const pTreeNode & node)  const
 {
 	if (node == nullptr)
 		return 0;
-	if (node->left == nullptr && node->right == nullptr)
+	if (node->getLeft() == nullptr && node->getRight() == nullptr)
 		return 1;
 	else
-		return calLeafNum(node->left) + calLeafNum(node->right);
+		return calLeafNum(node->getLeft()) + calLeafNum(node->getRight());
 }
 
 template<typename T>

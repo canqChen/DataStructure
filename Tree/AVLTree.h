@@ -5,6 +5,7 @@
 #include <stack>
 #include <queue>
 #include<vector>
+#include<exception>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ class AVLTree
 {
 public:
 	typedef T value_type;
-	typedef size_t size_type;
+	typedef vector<T>::size_type size_type;
 	
 
 	AVLTree() :root(nullptr) {};
@@ -24,9 +25,9 @@ public:
 
 	~AVLTree();
 
-	size_type depth();
-	size_type numOfNode();
-	size_type numOfLeaf();
+	size_type depth() const;
+	size_type nodeNum() const;
+	size_type leafNum() const;
 	bool empty() const { return root == nullptr ? true : false; }
 	void clear();
 	void insert(const T& ele);
@@ -38,37 +39,48 @@ public:
 	vector<T>& postOrderTraverse() const { return postOrderTraverse(root); }
 	vector<T>& levelOrderTraverse() const { return levelOrderTraverse(root); }
 
-protected:
-	template<typename T>
-	struct TreeNode 
-	{
-	private:
-		T data;
-		TreeNode<T>* left, * right;
-		int BF;
-	public:
-		TreeNode() : data(T()), BF(0), left(nullptr), right(nullptr) {};
-		TreeNode(T& data, int BF=0, TreeNode<T>* left = nullptr, TreeNode<T>* right = nullptr) 
-			: data(data), BF(0), left(left), right(right) {};
-	};
-
-	typedef TreeNode<T>* pTreeNode;
+	
 private:
+	template<typename _T>
+	struct TreeNode
+	{
+	public:
+		typedef TreeNode<_T>* pointer;
+		TreeNode() : value(_T()), BF(0), left(nullptr), right(nullptr) {};
+		TreeNode(const _T & val, int BF = 0, pointer left = nullptr, pointer right = nullptr)
+			: value(val), BF(0), left(left), right(right) {};
+		void setVal(const _T& val) { this->value = val; }
+		const _T& getVal() const { return this->value; }
+		void setBalancedFactor(const int& bf) { this->BF = bf; }
+		const int& getBalancedFactor() const { return this->BF; }
+		void setLeft(const pointer & node) { this->left = node; }
+		void setRight(const pointer & node) { this->right = node; }
+		const pointer& getLeft() const { return this->left; }
+		const pointer& getRight() const { return this->right; }
+	private:
+		_T value;
+		TreeNode<_T>* left, *right,  *parent;
+		int BF;    // left height - right height
+	};
+	typedef TreeNode<T>* pTreeNode;
+
 	pTreeNode root;
 
-	vector<T>& preOrderTraverse(pTreeNode node);
-	vector<T>& midOrderTraverse(pTreeNode node);
-	vector<T>& postOrderTraverse(pTreeNode node);
-	vector<T>& levelOrderTraverse(pTreeNode node);
+	vector<T>& preOrderTraverse(const pTreeNode &node) const;
+	vector<T>& midOrderTraverse(const pTreeNode &node) const;
+	vector<T>& postOrderTraverse(const pTreeNode &node) const;
+	vector<T>& levelOrderTraverse(const pTreeNode &node) const;
 
-	pTreeNode copy(pTreeNode node);
-	size_type calDepth(pTreeNode node);
-	size_type calNodeNum(pTreeNode node);
-	size_type calLeafNum(pTreeNode node);
+	pTreeNode copy(const pTreeNode & node);
+	size_type calDepth(const pTreeNode & node) const;
+	size_type calNodeNum(const pTreeNode &node) const;
+	size_type calLeafNum(const pTreeNode & node) const;
 
-	void deleteByMerging(pTreeNode node);
-	void deleteByCopying(pTreeNode node);
+	pTreeNode& createNode(const T& ele, int BF = 0, pTreeNode left = nullptr, pTreeNode right = nullptr)
+	{ return new TreeNode<T>(ele, BF, left, right); }
 
+	void deleteByMerging(pTreeNode & node, pTreeNode & parent);
+	void deleteByCopying(pTreeNode & node);
 	void buildBalancedTreeFromVector(vector<T>& vec, int start, int end);
 };
 
