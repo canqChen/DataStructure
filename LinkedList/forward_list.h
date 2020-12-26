@@ -1,5 +1,5 @@
-#ifndef __LINKEDLIST__
-#define __LINKEDLIST__
+#ifndef __FORWARD_LIST__
+#define __FORWARD_LIST__
 
 #include<iostream>
 
@@ -7,25 +7,82 @@
 using namespace std;
 
 template<typename T>
-struct ListNode {
+struct __ListNode {
 	T data;
-	ListNode<T>* next;
-	ListNode() : next(nullptr) {};
+	__ListNode<T>* next;
+	__ListNode() : data(T()), next(nullptr) {};
+	__ListNode(const T& val, __ListNode<T>* _next) : data(val) : next(_next) {};
 };
 
 template<typename T>
-class LinkedList
+struct __forward_list_iterator {
+	typedef T value_type;
+	typedef T& reference;
+	typedef T* pointer;
+
+	typedef __forward_list_iterator<T> self;
+
+	typedef __ListNode<T>* pNode;
+
+	__forward_list_iterator(const self& it) : node(it.node) {}
+
+	pNode node;
+	
+	self& operator ++()
+	{
+		this->node = this->node->next;
+		return *this;
+	}
+
+	self operator ++(int)
+	{
+		self tmp = *this;
+		node = (*node).next;
+		return tmp;
+	}
+
+	reference operator *() const
+	{
+		return (*node).data;
+	}
+
+	pointer operator ->() const
+	{
+		return &(operator*());
+	}
+
+	bool operator ==(const self& rhs) const
+	{
+		return this->node == rhs.node;
+	}
+
+	bool operator !=(const self& rhs) const
+	{
+		return !operator==(rhs);
+	}
+	
+};
+
+
+template<typename T>
+class forward_list
 {
 public:
-	LinkedList();
+	typedef forward_list<T> self;
+	typedef __ListNode<T>* pNode;
+	typedef T value_type;
+	typedef T& reference;
+	typedef __forward_list_iterator<T> iterator;
 
-	LinkedList(const LinkedList<T>& list);
-	~LinkedList()
+	forward_list();
+
+	forward_list(const forward_list<T>& list);
+	~forward_list()
 	{
 		destroy();
 	}
 
-	void extend(const LinkedList<T>& list);
+	void extend(const forward_list<T>& list);
 
 	size_t getLength() const
 	{
@@ -39,7 +96,7 @@ public:
 			throw string("wrong position");
 		}
 
-		LinkedList<T>* cur_node = head;
+		forward_list<T>* cur_node = head;
 
 		do
 		{
@@ -52,7 +109,7 @@ public:
 
 	size_t getPosition(T& ele)
 	{
-		LinkedList<T>* cur_node = head;
+		forward_list<T>* cur_node = head;
 		size_t pos = 0;
 
 		for (int size_t = 1; i <= length; i++)
@@ -67,10 +124,10 @@ public:
 		throw string("element not found!");
 	}
 
-	LinkedList<T>* getAddress(T ele)
+	forward_list<T>* getAddress(T ele)
 	{
 
-		LinkedList<T>* cur_node = head->next;
+		forward_list<T>* cur_node = head->next;
 
 		while (cur_node != nullptr)
 		{
@@ -88,7 +145,7 @@ public:
 	{
 		if (pos==-1) //default, insert to the tail
 		{
-			LinkedList<T>* cur_node = head;
+			forward_list<T>* cur_node = head;
 			while (1)
 			{
 				if (cur_node->next==nullptr)
@@ -97,7 +154,7 @@ public:
 				}
 				cur_node = cur_node->next;
 			}
-			LinkedList<T>* newNode = new LinkedList<T>();
+			forward_list<T>* newNode = new forward_list<T>();
 			newNode->data = ele;
 			newNode->next = nullptr;
 			cur_node->next = newNode;
@@ -111,12 +168,12 @@ public:
 		}
 
 		// insert to the middle
-		LinkedList<T>* cur_node = head;
+		forward_list<T>* cur_node = head;
 		for (int i = 1; i<=pos-1;i++)
 		{
 			cur_node = cur_node->next;
 		}
-		LinkedList<T>* newNode = new LinkedList<T>();
+		forward_list<T>* newNode = new forward_list<T>();
 		newNode->data = ele;
 		newNode->next = cur_node->next;
 		cur_node->next = newNode;
@@ -130,26 +187,26 @@ public:
 			throw string("wrong position");
 		}
 
-		LinkedList<T>* cur_node = head;
+		forward_list<T>* cur_node = head;
 
 		for (int i = 1; i <= pos - 1; i++)
 		{
 			cur_node = cur_node->next;
 		}
-		LinkedList<T>* temp = cur_node->next;
+		forward_list<T>* temp = cur_node->next;
 		cur_node->next = (cur_node->next)->next;
 		delete temp;
 	}
 
 	void removeNodeByValue(T& ele, bool rmAll = false)
 	{
-		LinkedList<T>* cur_node = head;
+		forward_list<T>* cur_node = head;
 
 		while ((cur_node->next) != nullptr)
 		{
 			if ((cur_node->next)->data == ele)
 			{
-				LinkedList<T>* temp = cur_node->next;
+				forward_list<T>* temp = cur_node->next;
 				cur_node->next = temp->next;
 				delete temp;
 				if (rmAll)
@@ -163,7 +220,7 @@ public:
 
 	void print()
 	{
-		LinkedList<T>* cur_node = head->next;
+		forward_list<T>* cur_node = head->next;
 		while (cur_node!=nullptr)
 		{
 			cout << cur_node->data<<"  ";
@@ -181,8 +238,8 @@ public:
 
 	void clear()
 	{
-		LinkedList<T>* first_node = head->next;
-		LinkedList<T>* temp;
+		forward_list<T>* first_node = head->next;
+		forward_list<T>* temp;
 		while (first_node != nullptr)
 		{
 			temp = first_node;
@@ -195,82 +252,11 @@ public:
 
 
 private:
-	ListNode<T> * head;
+	pNode head;
 	size_t length;
 };
 
 
-template<typename T>
-LinkedList<T>::LinkedList(): head(nullptr), length(0)
-{
-	head = new LinkedList<T>();
-}
-
-template<typename T>
-LinkedList<T>::LinkedList(const LinkedList<T>& list)
-{
-	destroy();
-	this->head = new LinkedList<T>();
-	this->head->next = nullptr;
-	this->length = list.length;
-
-	const LinkedList<T> * l_head = list.head;
-	LinkedList<T>* cur_node = head;
-
-	LinkedList<T>* l_cur_node = l_head->next;
-	while (l_cur_node != nullptr)
-	{
-		LinkedList<T>* new_node = new LinkedList<T>();
-		new_node->data = l_cur_node->data;
-		new_node->next = nullptr;
-
-		cur_node->next = new_node;
-
-		cur_node = cur_node->next;
-		l_cur_node = l_cur_node->next;
-	}
-}
-
-template<typename T>
-void LinkedList<T>::extend(const LinkedList<T>& list)
-{
-	this->length += list.length;
-
-	const LinkedList<T>* l_head = list.head;
-	LinkedList<T>* cur_node = head;
-
-	while (cur_node->next != nullptr)
-	{
-		cur_node = cur_node->next;
-	}
-
-	LinkedList<T>* l_cur_node = l_head->next;
-	while (l_cur_node != nullptr)
-	{
-		LinkedList<T>* new_node = new LinkedList<T>();
-		new_node->data = l_cur_node->data;
-		new_node->next = nullptr;
-
-		cur_node->next = new_node;
-
-		cur_node = cur_node->next;
-		l_cur_node = l_cur_node->next;
-	}
-}
-
-template<typename T>
-void LinkedList<T>::destroy()
-{
-	LinkedList<T>* temp;
-	while (head != nullptr)
-	{
-		temp = head;
-		head = head->next;
-		delete temp;
-		temp = nullptr;
-	}
-	length = 0;
-}
 
 
 #endif
