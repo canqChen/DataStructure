@@ -140,7 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Graph\Graph.h" />
-    <ClInclude Include="LinkedList\LinkedList.h" />
+    <ClInclude Include="LinkedList\forward_list.h" />
     <ClInclude Include="MyString\MyString.h" />
     <ClInclude Include="Queue\Queue.h" />
     <ClInclude Include="SeqList\SeqList.h" />
@@ -149,6 +149,7 @@
     <ClInclude Include="Tree\HuffmanTree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LinkedList\forward_list.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Search Algorithm\Search Algorithm.cpp" />
     <ClCompile Include="Sorting Algorithm\Sorting Algorithm.cpp" />

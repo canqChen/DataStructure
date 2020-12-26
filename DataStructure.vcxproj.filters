@@ -33,9 +33,6 @@
     <ClInclude Include="SeqList\SeqList.h">
       <Filter>SeqList</Filter>
     </ClInclude>
-    <ClInclude Include="LinkedList\LinkedList.h">
-      <Filter>LinkedList</Filter>
-    </ClInclude>
     <ClInclude Include="Stack\Stack.h">
       <Filter>Stack</Filter>
     </ClInclude>
@@ -54,6 +51,9 @@
     <ClInclude Include="Tree\AVLTree.h">
       <Filter>Tree</Filter>
     </ClInclude>
+    <ClInclude Include="LinkedList\forward_list.h">
+      <Filter>LinkedList</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -71,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="Tree\AVLTree.cpp">
       <Filter>Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkedList\forward_list.cpp">
+      <Filter>LinkedList</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@ class AVLTree
 {
 public:
 	typedef T value_type;
+	typedef T& reference;
 	typedef vector<T>::size_type size_type;
 	
 
@@ -39,27 +40,17 @@ public:
 	vector<T>& postOrderTraverse() const { return postOrderTraverse(root); }
 	vector<T>& levelOrderTraverse() const { return levelOrderTraverse(root); }
 
-	
 private:
 	template<typename _T>
 	struct TreeNode
 	{
-	public:
 		typedef TreeNode<_T>* pointer;
 		TreeNode() : value(_T()), BF(0), left(nullptr), right(nullptr) {};
 		TreeNode(const _T & val, int BF = 0, pointer left = nullptr, pointer right = nullptr)
 			: value(val), BF(0), left(left), right(right) {};
-		void setVal(const _T& val) { this->value = val; }
-		const _T& getVal() const { return this->value; }
-		void setBalancedFactor(const int& bf) { this->BF = bf; }
-		const int& getBalancedFactor() const { return this->BF; }
-		void setLeft(const pointer & node) { this->left = node; }
-		void setRight(const pointer & node) { this->right = node; }
-		const pointer& getLeft() const { return this->left; }
-		const pointer& getRight() const { return this->right; }
-	private:
+		
 		_T value;
-		TreeNode<_T>* left, *right,  *parent;
+		pointer left, *right,  *parent;
 		int BF;    // left height - right height
 	};
 	typedef TreeNode<T>* pTreeNode;
@@ -76,7 +67,7 @@ private:
 	size_type calNodeNum(const pTreeNode &node) const;
 	size_type calLeafNum(const pTreeNode & node) const;
 
-	pTreeNode& createNode(const T& ele, int BF = 0, pTreeNode left = nullptr, pTreeNode right = nullptr)
+	pTreeNode& createNode(const reference ele, int BF = 0, pTreeNode left = nullptr, pTreeNode right = nullptr)
 	{ return new TreeNode<T>(ele, BF, left, right); }
 
 	void deleteByMerging(pTreeNode & node, pTreeNode & parent);
