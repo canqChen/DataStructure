@@ -41,7 +41,7 @@ template<typename T>
 void SeqStack<T>::pop()
 {
 	if (empty())
-		throw exception("Stack underflow!");
+		throw std::runtime_error("Stack underflow!");
 	_size--;
 	tp--;
 }
@@ -50,7 +50,7 @@ template<typename T>
 T SeqStack<T>::top()
 {
 	if (empty())
-		throw exception("stack underflow!");
+		throw std::runtime_error("stack underflow!");
 
 	return stack[tp - 1];
 }
@@ -68,7 +68,7 @@ SeqStack<T>& SeqStack<T>::operator = (const SeqStack<T>& rhs)
 	this->capacity = rhs.capacity;
 	this->stack = new T[capacity];
 	if (this->stack == nullptr)
-		throw exception("fail to allocate memory.");
+		throw bad_alloc("fail to allocate memory.");
 	copy(begin(rhs.stack), end(rhs.stack), this->stack);
 	return *this;
 }
@@ -79,6 +79,8 @@ void SeqStack<T>::expand()
 	capacity *= 2;
 
 	T* tmp = new T[capacity];
+	if (tmp == nullptr)
+		throw bad_alloc("fail to allocate memory.");
 	for (size_type i = 0; i < _size; i++)
 		tmp[i] = stack[i];
 
@@ -117,7 +119,7 @@ template<typename T>
 void LinkedStack<T>::pop()
 {
 	if (tp == nullptr)
-		throw string("stack underflow");
+		throw std::runtime_error("stack underflow!");
 	stackNode<T>* tmp = tp;
 	tp = tp->next;
 	delete tmp;
@@ -128,7 +130,7 @@ template<typename T>
 T& LinkedStack<T>::top()
 {
 	if (tp == nullptr)
-		throw string("the stack is empty");
+		throw std::runtime_error("stack underflow!");
 
 	return tp->data;
 }
